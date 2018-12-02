@@ -1,0 +1,9 @@
+# Joystick Configuration Settings
+# Default setup is a sixaxis controller
+# Use a program such as jstest-gtk to find out your preferred mappings
+# If you create a new one you can pass to the launch file with the joy_mapping arg.
+
+
+DEADBAN: 0.01 
+OFFSET: 0.0
+SCALE: 1.0
