@@ -1,0 +1,10 @@
+<!-- phantom_joystick publisher -->
+<library path="lib/phantom_joystick">
+  <class name="phantom_joystick/phantom_joystick" type="phantom_joystick" 
+    base_class_type="nodelet::Nodelet">
+    <description>
+      phantom_joystick publisher.
+    </description>
+  </class>
+</library>
+
