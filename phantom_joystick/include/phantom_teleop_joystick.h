@@ -76,7 +76,6 @@ private:
         int makeword(int lowbyte, int highbyte);
 
         void Writecm530();
-        void Readcm530();
         
 	ros::NodeHandle nh_;
 	ros::Subscriber joy_sub_;

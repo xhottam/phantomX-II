@@ -3,20 +3,18 @@
 
 <launch>
     <arg name="joy_mapping" default="ps3"/>
-    <arg name="config" default="phantom"/>
     <rosparam command="load" file="$(find phantom_description)/params/$(arg joy_mapping).yaml" />
-    <rosparam command="load" file="$(find phantom_description)/params/$(arg config).yaml" />
     <node name="Playstation3_Controller" pkg="joy" type="joy_node">
      <!--<param name="deadzone" value="0.05" />
      <param name="coalesce_interval" value="1.0" />
      <param name="autorepeat_rate" value="0.0"/>-->
     </node>
     <node name="Phantom_Teleop_Joystick" pkg="phantom_joystick" type="phantom_joystick" output="screen"/>
-    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+<!--<node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
      <param name="serial_port"         type="string" value="/dev/ttyUSB1"/>
      <param name="serial_baudrate"     type="int"    value="115200"/>
      <param name="frame_id"            type="string" value="laser"/>
      <param name="inverted"            type="bool"   value="false"/>
      <param name="angle_compensate"    type="bool"   value="true"/>
-    </node>
+    </node>-->
 </launch>

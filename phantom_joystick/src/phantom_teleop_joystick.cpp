@@ -2,8 +2,10 @@
 #include <std_msgs/ByteMultiArray.h>
 #include "LinuxDARwIn.h"
 
+#define M_PI_Phoenix_Code           3141
+
 using namespace Robot;
-LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB0");
+LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB1");
 ArbotixPro arbotixpro(&linux_arbotixpro);
 
 //==============================================================================
@@ -38,15 +40,13 @@ PhantomTeleopJoystick::PhantomTeleopJoystick( void )
     
     
     joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("/joy", 10, &PhantomTeleopJoystick::joyCallback,this);
-    //phantom_joy_pub = nh_.advertise<std_msgs::ByteMultiArray>("/phantom_joy", 1000);
-    phantom_joint_state = nh_.advertise<sensor_msgs::JointState>("/joint_states", 10);
+    phantom_joint_state = nh_.advertise<sensor_msgs::JointState>("/joint_states", 1);
     
     if (NON_TELEOP == false){
 	    //linux_arbotixpro.DEBUG_PRINT= true;	    
 	    if (arbotixpro.Connect() == true){
                 //arbotix_con_feed = true;
-                timer_Write = nh_.createTimer(ros::Duration(0.06), boost::bind(&PhantomTeleopJoystick::Writecm530, this));
-                //timer_Read = nh_.createTimer(ros::Duration(0.06), boost::bind(&PhantomTeleopJoystick::Readcm530, this));
+                timer_Write = nh_.createTimer(ros::Duration(0.04), boost::bind(&PhantomTeleopJoystick::Writecm530, this));
 	    }
     }
    
@@ -64,17 +64,16 @@ void PhantomTeleopJoystick::publishJoinStates(sensor_msgs::JointState *joint_sta
     int i = 0;
     int rxindex = 2;
     for( int leg_index = 0; leg_index < NUMBER_OF_LEGS; leg_index++ ){
-	
+        rxindex++;	
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * makeword(rxpacket[rxindex++],rxpacket[rxindex++]);
+        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
         i++;
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * makeword(rxpacket[rxindex++],rxpacket[rxindex++]);
+        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
         i++;
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * makeword(rxpacket[rxindex++],rxpacket[rxindex++]);
+        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
         i++;
-        rxindex++;
     }
     phantom_joint_state.publish( *joint_state );
 }
@@ -164,9 +163,6 @@ void PhantomTeleopJoystick::Writecm530(){
 }
 
 
-void PhantomTeleopJoystick::Readcm530(){
-     rxpacket = arbotixpro.ReadCM530(); 
-}
 
 int main(int argc, char** argv)
 {
@@ -184,10 +180,9 @@ int main(int argc, char** argv)
     ros::AsyncSpinner spinner(1); // Using 1 threads
     spinner.start();
 
-    ros::Rate loop_rate(100); // 100 hz
+    ros::Rate loop_rate(1000); // 100 hz
     while ( ros::ok() )
     {  
-        //memset(phantomTeleopJoystick.rxpacket,0,50);
         phantomTeleopJoystick.rxpacket = arbotixpro.ReadCM530();
         phantomTeleopJoystick.publishJoinStates(&phantomTeleopJoystick.joint_state_);
         loop_rate.sleep();
