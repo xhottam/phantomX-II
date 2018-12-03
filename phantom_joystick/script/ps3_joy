@@ -12,14 +12,14 @@
 
 #APP_PATH=""
 
-. /opt/ros/hydro/setup.sh
+. /opt/ros/indigo/setup.sh
 export ROS_HOME=/root
 
 # path to daemon
-DAEMON=/opt/ros/hydro/lib/ps3joy/ps3joy.py
+DAEMON=/opt/ros/indigo/lib/ps3joy/ps3joy.py
 
 # startup args
-DAEMON_OPTS="--inactivity-timeout=900"
+DAEMON_OPTS="--inactivity-timeout=900 --continuous-output"
 
 # script name
 NAME=ps3joy

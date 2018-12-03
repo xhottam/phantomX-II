@@ -64,13 +64,13 @@ void PhantomTeleopJoystick::publishJoinStates(sensor_msgs::JointState *joint_sta
     for( int leg_index = 0; leg_index < NUMBER_OF_LEGS; leg_index++ ){
         rxindex++;	
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
+        joint_state->position[i] = servo_orientation_[i] * ((makeword(rxpacket[rxindex++],rxpacket[rxindex++]) * M_PI ) /180);
         i++;
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
+        joint_state->position[i] = servo_orientation_[i] * ((makeword(rxpacket[rxindex++],rxpacket[rxindex++]) * M_PI ) /180);
         i++;
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
+        joint_state->position[i] = servo_orientation_[i] * ((makeword(rxpacket[rxindex++],rxpacket[rxindex++]) * M_PI ) /180);
         i++;
     }
     phantom_joint_state.publish( *joint_state );
