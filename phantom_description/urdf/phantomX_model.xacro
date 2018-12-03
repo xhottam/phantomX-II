@@ -138,7 +138,7 @@
 			<origin xyz="${coxa_length} 0.0 0.0" rpy="-${pi/2} ${pi/2} 0.0" />
 			<parent link="coxa_${side}${position}" />
 			<child link="femur_${side}${position}" />
-			<axis xyz="0.0 0.0 ${-axis}" />
+			<axis xyz="0.0 0.0 ${axis}" />
 			<limit lower="${joint_lower_limit}" upper="${joint_upper_limit}" effort="${joint_effort}" velocity="${joint_velocity}" />
 		</joint>
 		<transmission name="femur_transmission_${side}${position}">
@@ -188,7 +188,7 @@
 			<origin xyz="0.0 -${femur_length} 0.0" rpy="${pi} 0.0 0.0" />
 			<parent link="femur_${side}${position}" />
 			<child link="tibia_${side}${position}" />
-			<axis xyz="0.0 0.0 ${axis}" />
+			<axis xyz="0.0 0.0 ${-axis}" />
 			<limit lower="${joint_lower_limit}" upper="${joint_upper_limit}" effort="${joint_effort}" velocity="${joint_velocity}" />
 		</joint>
 		<transmission name="tibia_transmission_${side}${position}">
