@@ -89,7 +89,6 @@ private:
         double OFFSET;
 
 	ros::Timer timer_Write;
-        ros::Timer timer_Read;
 
 	XmlRpc::XmlRpcValue SERVOS;
         std::vector<std::string> servo_map_key_;

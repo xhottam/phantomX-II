@@ -2,7 +2,6 @@
 #include <std_msgs/ByteMultiArray.h>
 #include "LinuxDARwIn.h"
 
-#define M_PI_Phoenix_Code           3141
 
 using namespace Robot;
 LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB1");
@@ -40,12 +39,11 @@ PhantomTeleopJoystick::PhantomTeleopJoystick( void )
     
     
     joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("/joy", 10, &PhantomTeleopJoystick::joyCallback,this);
-    phantom_joint_state = nh_.advertise<sensor_msgs::JointState>("/joint_states", 1);
+    phantom_joint_state = nh_.advertise<sensor_msgs::JointState>("/joint_states", 10);
     
     if (NON_TELEOP == false){
 	    //linux_arbotixpro.DEBUG_PRINT= true;	    
 	    if (arbotixpro.Connect() == true){
-                //arbotix_con_feed = true;
                 timer_Write = nh_.createTimer(ros::Duration(0.04), boost::bind(&PhantomTeleopJoystick::Writecm530, this));
 	    }
     }
@@ -180,7 +178,7 @@ int main(int argc, char** argv)
     ros::AsyncSpinner spinner(1); // Using 1 threads
     spinner.start();
 
-    ros::Rate loop_rate(1000); // 100 hz
+    ros::Rate loop_rate(0.8); // 100 hz
     while ( ros::ok() )
     {  
         phantomTeleopJoystick.rxpacket = arbotixpro.ReadCM530();
