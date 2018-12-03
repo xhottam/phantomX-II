@@ -44,7 +44,7 @@ PhantomTeleopJoystick::PhantomTeleopJoystick( void )
     if (NON_TELEOP == false){
 	    //linux_arbotixpro.DEBUG_PRINT= true;	    
 	    if (arbotixpro.Connect() == true){
-                timer_Write = nh_.createTimer(ros::Duration(0.04), boost::bind(&PhantomTeleopJoystick::Writecm530, this));
+                timer_Write = nh_.createTimer(ros::Duration(0.04), boost::bind(&PhantomTeleopJoystick::Write_Read_CM530, this));
 	    }
     }
    
@@ -57,7 +57,7 @@ PhantomTeleopJoystick::PhantomTeleopJoystick( void )
 
 void PhantomTeleopJoystick::publishJoinStates(sensor_msgs::JointState *joint_state)
 {
-   
+
     joint_state->header.stamp = ros::Time::now();
     int i = 0;
     int rxindex = 2;
@@ -156,8 +156,8 @@ int PhantomTeleopJoystick::makeword(int lowbyte, int highbyte) {
 	return (int)word;
 }
 
-void PhantomTeleopJoystick::Writecm530(){
-	arbotixpro.WriteCM530(rightY,rightX,leftY,leftX,buttons,checksum);
+void PhantomTeleopJoystick::Write_Read_CM530(){
+	arbotixpro.TxRx_CM530(rightY,rightX,leftY,leftX,buttons,checksum,rxpacket);
 }
 
 
@@ -178,10 +178,9 @@ int main(int argc, char** argv)
     ros::AsyncSpinner spinner(1); // Using 1 threads
     spinner.start();
 
-    ros::Rate loop_rate(0.8); // 100 hz
+    ros::Rate loop_rate(100); // 100 hz
     while ( ros::ok() )
     {  
-        phantomTeleopJoystick.rxpacket = arbotixpro.ReadCM530();
         phantomTeleopJoystick.publishJoinStates(&phantomTeleopJoystick.joint_state_);
         loop_rate.sleep();
     }

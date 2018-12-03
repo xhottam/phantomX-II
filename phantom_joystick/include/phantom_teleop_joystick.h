@@ -75,7 +75,7 @@ private:
 	int mapa(double x, double in_min, double in_max, double out_min, double out_max);
         int makeword(int lowbyte, int highbyte);
 
-        void Writecm530();
+        void Write_Read_CM530();
         
 	ros::NodeHandle nh_;
 	ros::Subscriber joy_sub_;
