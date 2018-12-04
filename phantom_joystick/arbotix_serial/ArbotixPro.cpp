@@ -747,7 +747,15 @@ void ArbotixPro::TxRx_CM530(int rightY,int rightX,int leftY,int leftX,int button
         txpacket[8]  = checksum;
 
 	_TxRx_CM530(txpacket,rxpacket,2);
-        
+
+/**      int rxindex = 2;
+      for (int j=0; j < 6 ; j++){
+	rxindex++;
+        printf("COXA [%i]: %i",j,ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));
+	printf(" | FEMUR[%i]: %i",j,ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));
+	printf(" | TIBIA[%i]: %i\n",j,ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));	
+      }
+*/        
 
 }
 
@@ -778,15 +786,15 @@ while(1)
                         {
                                 if (rxpacket[i] == 0xFF && rxpacket[i + 1] == 0xFF){
                                         //printf("Find packet header\n");
-                                        printf("find ->");
-                                        timestamp();
+                                        //printf("find ->");
+                                        //timestamp();
                                         break;
                                 }else if (i == (get_length - 2) && rxpacket[get_length - 1] == 0xFF){
-                                        printf ("Indice %i rxpacket[%i] == 0\n",i,get_length -1);
+                                        //printf ("Indice %i rxpacket[%i] == 0\n",i,get_length -1);
                                         break;
                                 }
                         }
-                printf("rxpacket[%i]\n",i);
+                //printf("rxpacket[%i]\n",i);
                 if (i == 0)
                         {
                                 // Check checksum

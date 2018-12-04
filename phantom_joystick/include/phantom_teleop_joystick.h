@@ -73,7 +73,7 @@ public:
 private:
         void joyCallback( const sensor_msgs::Joy::ConstPtr &joy );
 	int mapa(double x, double in_min, double in_max, double out_min, double out_max);
-        int makeword(int lowbyte, int highbyte);
+        int makeword(int lowbyte, int highbyte,bool feed,int index);
 
         void Write_Read_CM530();
         
