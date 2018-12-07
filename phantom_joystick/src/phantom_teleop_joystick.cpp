@@ -2,8 +2,9 @@
 #include <std_msgs/ByteMultiArray.h>
 #include "LinuxDARwIn.h"
 
-#define	c4DEC		10000
+#define	c1DEC		10
 #define _M_PI           3141
+#define DEBUG_JOINTS
 
 using namespace Robot;
 LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB0");
@@ -41,10 +42,10 @@ PhantomTeleopJoystick::PhantomTeleopJoystick( void )
     
     
     joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("/joy", 10, &PhantomTeleopJoystick::joyCallback,this);
-    phantom_joint_state = nh_.advertise<sensor_msgs::JointState>("/joint_states", 10);
+    phantom_joint_state = nh_.advertise<sensor_msgs::JointState>("/joint_states", 1);
     
     if (NON_TELEOP == false){
-	    //linux_arbotixpro.DEBUG_PRINT= true;	    
+            //arbotixpro.DEBUG_JOINTS = true;
 	    if (arbotixpro.Connect() == true){
                 timer_Write = nh_.createTimer(ros::Duration(0.04), boost::bind(&PhantomTeleopJoystick::Write_Read_CM530, this));
 	    }
@@ -63,16 +64,34 @@ void PhantomTeleopJoystick::publishJoinStates(sensor_msgs::JointState *joint_sta
     joint_state->header.stamp = ros::Time::now();
     int i = 0;
     int rxindex = 2;
+    int signo = 0;
     for( int leg_index = 0; leg_index < NUMBER_OF_LEGS; leg_index++ ){
         rxindex++;	
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (((makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index)/c4DEC) * M_PI ) /180);
+        if(rxpacket[rxindex++] == 0){
+		signo = -1;
+	}else{
+                signo = 1;
+	} 
+        joint_state->position[i] = servo_orientation_[i] * (( signo  * (makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index )/ c1DEC )  * M_PI ) /180);
         i++;
+        if(rxpacket[rxindex++] == 0){
+                signo = -1;
+        }else{
+                signo = 1;
+        }
+
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (((makeword(rxpacket[rxindex++],rxpacket[rxindex++],true,leg_index)/c4DEC) * M_PI ) /180);
+        joint_state->position[i] = servo_orientation_[i] * ((  signo * ((makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index ) - 100)  / c1DEC )  * M_PI ) /180);
         i++;
+        if(rxpacket[rxindex++] == 0){
+                signo = -1;
+	}else{
+		signo = 1;
+        }
+
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (((makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index)/c4DEC) * M_PI ) /180);
+        joint_state->position[i] = servo_orientation_[i] * (( signo * ((makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index) - 400 )  / c1DEC )   * M_PI ) /180);
         i++;
     }
     phantom_joint_state.publish( *joint_state );
@@ -157,7 +176,7 @@ int PhantomTeleopJoystick::makeword(int lowbyte, int highbyte,bool feed,int inde
 	word = word + lowbyte;
         
 	if(feed && (index == 0)){
-           printf("%i\n",word);
+           printf("%i\n",word );
 	} 
 	
 	return (int)word;
