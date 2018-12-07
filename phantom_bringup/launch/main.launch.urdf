@@ -4,7 +4,10 @@
 
   <rosparam command="load" file="$(find phantom_description)/params/dynamixel.yaml"/>
   <rosparam command="load" file="$(find phantom_description)/params/phantom.yaml" />
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(find phantom_description)/urdf/phantomX_model.xacro'" />
+  <!--<param name="robot_description" command="$(find xacro)/xacro.py '$(find phantom_description)/urdf/phantomX_model.xacro'" />-->
+
+  <arg name="model" default="$(find phantom_description)/urdf/model.urdf"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)"/>
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
    <!--<remap from="/joint_states" to="/Golem/joint_states"/>-->
