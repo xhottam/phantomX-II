@@ -12,12 +12,18 @@ namespace phantom_msgs
   class Sounds : public ros::Msg
   {
     public:
-      bool torque;
-      bool battery;
-      bool auto_level;
-      bool stand;
-      bool waiting;
-      bool shut_down;
+      typedef bool _torque_type;
+      _torque_type torque;
+      typedef bool _battery_type;
+      _battery_type battery;
+      typedef bool _auto_level_type;
+      _auto_level_type auto_level;
+      typedef bool _stand_type;
+      _stand_type stand;
+      typedef bool _waiting_type;
+      _waiting_type waiting;
+      typedef bool _shut_down_type;
+      _shut_down_type shut_down;
 
     Sounds():
       torque(0),

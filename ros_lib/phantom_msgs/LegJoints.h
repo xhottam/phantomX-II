@@ -12,10 +12,14 @@ namespace phantom_msgs
   class LegJoints : public ros::Msg
   {
     public:
-      float coxa;
-      float femur;
-      float tibia;
-      float tarsus;
+      typedef float _coxa_type;
+      _coxa_type coxa;
+      typedef float _femur_type;
+      _femur_type femur;
+      typedef float _tibia_type;
+      _tibia_type tibia;
+      typedef float _tarsus_type;
+      _tarsus_type tarsus;
 
     LegJoints():
       coxa(0),

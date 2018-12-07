@@ -41,15 +41,22 @@
   #include <WProgram.h>  // Arduino 0022
 #endif
 
-#if defined(__MK20DX128__) || defined(__MK20DX256__)
-  #include <usb_serial.h>  // Teensy 3.0 and 3.1
-  #define SERIAL_CLASS usb_serial_class
+#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__)
+  #if defined(USE_TEENSY_HW_SERIAL)
+    #define SERIAL_CLASS HardwareSerial // Teensy HW Serial
+  #else
+    #include <usb_serial.h>  // Teensy 3.0 and 3.1
+    #define SERIAL_CLASS usb_serial_class
+  #endif
 #elif defined(_SAM3XA_)
   #include <UARTClass.h>  // Arduino Due
   #define SERIAL_CLASS UARTClass
 #elif defined(USE_USBCON)
   // Arduino Leonardo USB Serial Port
   #define SERIAL_CLASS Serial_
+#elif (defined(__STM32F1__) and !(defined(USE_STM32_HW_SERIAL))) or defined(SPARK) 
+  // Stm32duino Maple mini USB Serial Port
+  #define SERIAL_CLASS USBSerial
 #else 
   #include <HardwareSerial.h>  // Arduino AVR
   #define SERIAL_CLASS HardwareSerial
@@ -66,13 +73,15 @@ class ArduinoHardware {
 #if defined(USBCON) and !(defined(USE_USBCON))
       /* Leonardo support */
       iostream = &Serial1;
+#elif defined(USE_TEENSY_HW_SERIAL) or defined(USE_STM32_HW_SERIAL)
+      iostream = &Serial1;
 #else
       iostream = &Serial;
 #endif
       baud_ = 57600;
     }
     ArduinoHardware(ArduinoHardware& h){
-      this->iostream = iostream;
+      this->iostream = h.iostream;
       this->baud_ = h.baud_;
     }
   

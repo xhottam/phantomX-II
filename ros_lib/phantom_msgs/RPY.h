@@ -12,9 +12,12 @@ namespace phantom_msgs
   class RPY : public ros::Msg
   {
     public:
-      float roll;
-      float pitch;
-      float yaw;
+      typedef float _roll_type;
+      _roll_type roll;
+      typedef float _pitch_type;
+      _pitch_type pitch;
+      typedef float _yaw_type;
+      _yaw_type yaw;
 
     RPY():
       roll(0),

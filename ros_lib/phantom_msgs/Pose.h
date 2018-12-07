@@ -14,8 +14,10 @@ namespace phantom_msgs
   class Pose : public ros::Msg
   {
     public:
-      geometry_msgs::Point position;
-      phantom_msgs::RPY orientation;
+      typedef geometry_msgs::Point _position_type;
+      _position_type position;
+      typedef phantom_msgs::RPY _orientation_type;
+      _orientation_type orientation;
 
     Pose():
       position(),
