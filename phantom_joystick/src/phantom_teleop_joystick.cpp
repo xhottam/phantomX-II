@@ -2,9 +2,11 @@
 #include <std_msgs/ByteMultiArray.h>
 #include "LinuxDARwIn.h"
 
+#define	c4DEC		10000
+#define _M_PI           3141
 
 using namespace Robot;
-LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB1");
+LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB0");
 ArbotixPro arbotixpro(&linux_arbotixpro);
 
 //==============================================================================
@@ -64,13 +66,13 @@ void PhantomTeleopJoystick::publishJoinStates(sensor_msgs::JointState *joint_sta
     for( int leg_index = 0; leg_index < NUMBER_OF_LEGS; leg_index++ ){
         rxindex++;	
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
+        joint_state->position[i] = servo_orientation_[i] * (((makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index)/c4DEC) * M_PI ) /180);
         i++;
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
+        joint_state->position[i] = servo_orientation_[i] * (((makeword(rxpacket[rxindex++],rxpacket[rxindex++],true,leg_index)/c4DEC) * M_PI ) /180);
         i++;
         joint_state->name[i] = servo_names_[i];
-        joint_state->position[i] = servo_orientation_[i] * (makeword(rxpacket[rxindex++],rxpacket[rxindex++])*M_PI)/180;
+        joint_state->position[i] = servo_orientation_[i] * (((makeword(rxpacket[rxindex++],rxpacket[rxindex++],false,leg_index)/c4DEC) * M_PI ) /180);
         i++;
     }
     phantom_joint_state.publish( *joint_state );
@@ -148,11 +150,16 @@ int PhantomTeleopJoystick::mapa(double x, double in_min, double in_max, double o
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-int PhantomTeleopJoystick::makeword(int lowbyte, int highbyte) {
+int PhantomTeleopJoystick::makeword(int lowbyte, int highbyte,bool feed,int index) {
 	unsigned short word;
 	word = highbyte;
 	word = word << 8;
 	word = word + lowbyte;
+        
+	if(feed && (index == 0)){
+           printf("%i\n",word);
+	} 
+	
 	return (int)word;
 }
 
