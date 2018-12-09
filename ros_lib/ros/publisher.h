@@ -1,4 +1,4 @@
-/*
+/* 
  * Software License Agreement (BSD License)
  *
  * Copyright (c) 2011, Willow Garage, Inc.
@@ -36,38 +36,31 @@
 #define _ROS_PUBLISHER_H_
 
 #include "rosserial_msgs/TopicInfo.h"
-#include "ros/node_handle.h"
+#include "node_handle.h"
 
-namespace ros
-{
+namespace ros {
 
-/* Generic Publisher */
-class Publisher
-{
-public:
-  Publisher(const char * topic_name, Msg * msg, int endpoint = rosserial_msgs::TopicInfo::ID_PUBLISHER) :
-    topic_(topic_name),
-    msg_(msg),
-    endpoint_(endpoint) {};
-
-  int publish(const Msg * msg)
+  /* Generic Publisher */
+  class Publisher
   {
-    return nh_->publish(id_, msg);
+    public:
+      Publisher( const char * topic_name, Msg * msg, int endpoint=rosserial_msgs::TopicInfo::ID_PUBLISHER) :
+        topic_(topic_name), 
+        msg_(msg),
+        endpoint_(endpoint) {};
+
+      int publish( const Msg * msg ) { return nh_->publish(id_, msg); };
+      int getEndpointType(){ return endpoint_; }
+
+      const char * topic_;
+      Msg *msg_;
+      // id_ and no_ are set by NodeHandle when we advertise 
+      int id_;
+      NodeHandleBase_* nh_;
+
+    private:
+      int endpoint_;
   };
-  int getEndpointType()
-  {
-    return endpoint_;
-  }
-
-  const char * topic_;
-  Msg *msg_;
-  // id_ and no_ are set by NodeHandle when we advertise
-  int id_;
-  NodeHandleBase_* nh_;
-
-private:
-  int endpoint_;
-};
 
 }
 

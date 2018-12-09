@@ -14,27 +14,19 @@ namespace sensor_msgs
   class CameraInfo : public ros::Msg
   {
     public:
-      typedef std_msgs::Header _header_type;
-      _header_type header;
-      typedef uint32_t _height_type;
-      _height_type height;
-      typedef uint32_t _width_type;
-      _width_type width;
-      typedef const char* _distortion_model_type;
-      _distortion_model_type distortion_model;
-      uint32_t D_length;
-      typedef float _D_type;
-      _D_type st_D;
-      _D_type * D;
+      std_msgs::Header header;
+      uint32_t height;
+      uint32_t width;
+      const char* distortion_model;
+      uint8_t D_length;
+      float st_D;
+      float * D;
       float K[9];
       float R[9];
       float P[12];
-      typedef uint32_t _binning_x_type;
-      _binning_x_type binning_x;
-      typedef uint32_t _binning_y_type;
-      _binning_y_type binning_y;
-      typedef sensor_msgs::RegionOfInterest _roi_type;
-      _roi_type roi;
+      uint32_t binning_x;
+      uint32_t binning_y;
+      sensor_msgs::RegionOfInterest roi;
 
     CameraInfo():
       header(),
@@ -66,25 +58,24 @@ namespace sensor_msgs
       *(outbuffer + offset + 3) = (this->width >> (8 * 3)) & 0xFF;
       offset += sizeof(this->width);
       uint32_t length_distortion_model = strlen(this->distortion_model);
-      varToArr(outbuffer + offset, length_distortion_model);
+      memcpy(outbuffer + offset, &length_distortion_model, sizeof(uint32_t));
       offset += 4;
       memcpy(outbuffer + offset, this->distortion_model, length_distortion_model);
       offset += length_distortion_model;
-      *(outbuffer + offset + 0) = (this->D_length >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (this->D_length >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (this->D_length >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (this->D_length >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->D_length);
-      for( uint32_t i = 0; i < D_length; i++){
+      *(outbuffer + offset++) = D_length;
+      *(outbuffer + offset++) = 0;
+      *(outbuffer + offset++) = 0;
+      *(outbuffer + offset++) = 0;
+      for( uint8_t i = 0; i < D_length; i++){
       offset += serializeAvrFloat64(outbuffer + offset, this->D[i]);
       }
-      for( uint32_t i = 0; i < 9; i++){
+      for( uint8_t i = 0; i < 9; i++){
       offset += serializeAvrFloat64(outbuffer + offset, this->K[i]);
       }
-      for( uint32_t i = 0; i < 9; i++){
+      for( uint8_t i = 0; i < 9; i++){
       offset += serializeAvrFloat64(outbuffer + offset, this->R[i]);
       }
-      for( uint32_t i = 0; i < 12; i++){
+      for( uint8_t i = 0; i < 12; i++){
       offset += serializeAvrFloat64(outbuffer + offset, this->P[i]);
       }
       *(outbuffer + offset + 0) = (this->binning_x >> (8 * 0)) & 0xFF;
@@ -116,7 +107,7 @@ namespace sensor_msgs
       this->width |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
       offset += sizeof(this->width);
       uint32_t length_distortion_model;
-      arrToVar(length_distortion_model, (inbuffer + offset));
+      memcpy(&length_distortion_model, (inbuffer + offset), sizeof(uint32_t));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_distortion_model; ++k){
           inbuffer[k-1]=inbuffer[k];
@@ -124,25 +115,22 @@ namespace sensor_msgs
       inbuffer[offset+length_distortion_model-1]=0;
       this->distortion_model = (char *)(inbuffer + offset-1);
       offset += length_distortion_model;
-      uint32_t D_lengthT = ((uint32_t) (*(inbuffer + offset))); 
-      D_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); 
-      D_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); 
-      D_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); 
-      offset += sizeof(this->D_length);
+      uint8_t D_lengthT = *(inbuffer + offset++);
       if(D_lengthT > D_length)
         this->D = (float*)realloc(this->D, D_lengthT * sizeof(float));
+      offset += 3;
       D_length = D_lengthT;
-      for( uint32_t i = 0; i < D_length; i++){
+      for( uint8_t i = 0; i < D_length; i++){
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_D));
         memcpy( &(this->D[i]), &(this->st_D), sizeof(float));
       }
-      for( uint32_t i = 0; i < 9; i++){
+      for( uint8_t i = 0; i < 9; i++){
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->K[i]));
       }
-      for( uint32_t i = 0; i < 9; i++){
+      for( uint8_t i = 0; i < 9; i++){
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->R[i]));
       }
-      for( uint32_t i = 0; i < 12; i++){
+      for( uint8_t i = 0; i < 12; i++){
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->P[i]));
       }
       this->binning_x =  ((uint32_t) (*(inbuffer + offset)));

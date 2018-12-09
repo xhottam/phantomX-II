@@ -23,7 +23,7 @@ namespace phantom_msgs
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      for( uint32_t i = 0; i < 6; i++){
+      for( uint8_t i = 0; i < 6; i++){
       offset += this->leg[i].serialize(outbuffer + offset);
       }
       return offset;
@@ -32,7 +32,7 @@ namespace phantom_msgs
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
-      for( uint32_t i = 0; i < 6; i++){
+      for( uint8_t i = 0; i < 6; i++){
       offset += this->leg[i].deserialize(inbuffer + offset);
       }
      return offset;

@@ -12,12 +12,9 @@ namespace geometry_msgs
   class Pose2D : public ros::Msg
   {
     public:
-      typedef float _x_type;
-      _x_type x;
-      typedef float _y_type;
-      _y_type y;
-      typedef float _theta_type;
-      _theta_type theta;
+      float x;
+      float y;
+      float theta;
 
     Pose2D():
       x(0),
