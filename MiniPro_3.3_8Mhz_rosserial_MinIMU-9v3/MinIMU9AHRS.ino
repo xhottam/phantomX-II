@@ -196,28 +196,7 @@ void loop() //Main Loop
       Read_Compass();    // Read I2C magnetometer
       Compass_Heading(); // Calculate magnetic heading
     }
-/** Serial.print(gyro_x);
-    Serial.print( " - " );
-    Serial.print(gyro_y);
-    Serial.print( " - " );
-    Serial.print(gyro_z);
-Serial.println();
-    Serial.print(accel_x);
-    Serial.print( " - " );
-    Serial.print(accel_y);
-    Serial.print( " - " );
-    Serial.print(accel_z);
-Serial.println();
-    Serial.print(magnetom_x);
-    Serial.print( " - " );
-    Serial.print(magnetom_y);
-    Serial.print( " - " );
-    Serial.print(magnetom_z);
-Serial.println();
-    printdata();  
-*/
 
-//  }
             orientation.x = magnetom_x;
             orientation.y = magnetom_y;
             orientation.z = magnetom_z;
