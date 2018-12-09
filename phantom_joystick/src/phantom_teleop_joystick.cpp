@@ -4,7 +4,9 @@
 
 #define	c1DEC		10
 #define _M_PI           3141
-#define DEBUG_JOINTS
+#define ToRad(x) ((x)*0.01745329252)  // *pi/180
+#define ToDeg(x) ((x)*57.2957795131)  // *180/pi
+
 
 using namespace Robot;
 LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB0");

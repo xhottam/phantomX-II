@@ -1,0 +1,9 @@
+<!-- phantom_joystick publisher -->
+<library path="lib/phantom_controller">
+  <class name="phantom_controller/phantom_controller" type="imu" 
+    base_class_type="nodelet::Nodelet">
+    <description>
+      phantom_controller imu.
+    </description>
+  </class>
+</library>
