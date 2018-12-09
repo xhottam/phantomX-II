@@ -139,7 +139,6 @@ unsigned int counter=0;
 void setup()
 {
   
-  Serial.begin(115200);
   nh.initNode();
 
   nh.advertise(imu_ori);
