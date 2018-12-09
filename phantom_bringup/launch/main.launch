@@ -16,6 +16,11 @@
   <node pkg="rviz" type="rviz" name="rviz"
     args="-d $(find hector_slam_launch)/rviz_cfg/mapping_demo.rviz"/>
   <include file="$(find hector_mapping)/launch/mapping_default.launch"/>
+  <node pkg="hector_imu_attitude_to_tf" type="imu_attitude_to_tf_node" name="imu_attitude_to_tf_node" output="screen">
+	<!--<remap from="imu_topic" to="thumper_imu"/>
+	<param name="base_stabilized_frame" type="string" value="base_stabilized"/>
+	<param name="base_frame" type="string" value="base_footprint"/>-->
+  </node>
 
   <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
     <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/>
