@@ -50,53 +50,27 @@ int SENSOR_SIGN[9] = {1,1,1,-1,-1,-1,1,1,1}; //Correct directions x,y,z - gyro, 
 
 // tested with Arduino Uno with ATmega328 and Arduino Duemilanove with ATMega168
 
-#define DEFAULT_FREQUENCY     50 /*Hz*/
-#define GYROSCOPE (unsigned)     0
-#define ACCELEROMETER (unsigned) 1
-#define MAGNETOMETER (unsigned)  2
-#define DATA_LENGTH (unsigned)   1
-
 #include <Wire.h>
-#include <ros.h>
 
-
-unsigned long loop_rate;
-
-
-#include <geometry_msgs/Vector3.h>
-#include <geometry_msgs/Quaternion.h>
-
-
-ros::NodeHandle nh;
-
-geometry_msgs::Quaternion orientation;
-ros::Publisher imu_ori("imu_orientation",&orientation);
-
-geometry_msgs::Vector3 angular_velocity;
-ros::Publisher imu_gyr("imu_gyro",&angular_velocity);
-
-geometry_msgs::Vector3 linear_acceleration;
-ros::Publisher imu_acc("imu_accl",&linear_acceleration);
-
-//// accelerometer: 8 g sensitivity
-//// 3.9 mg/digit; 1 g = 256
+// accelerometer: 8 g sensitivity
+// 3.9 mg/digit; 1 g = 256
 #define GRAVITY 256  //this equivalent to 1G in the raw data coming from the accelerometer
-//
-//#define ToRad(x) ((x)*0.01745329252)  // *pi/180
-//#define ToDeg(x) ((x)*57.2957795131)  // *180/pi
-//
-//// gyro: 2000 dps full scale
-//// 70 mdps/digit; 1 dps = 0.07
-//#define Gyro_Gain_X 0.07 //X axis Gyro gain
-//#define Gyro_Gain_Y 0.07 //Y axis Gyro gain
-//#define Gyro_Gain_Z 0.07 //Z axis Gyro gain
-//#define Gyro_Scaled_X(x) ((x)*ToRad(Gyro_Gain_X)) //Return the scaled ADC raw data of the gyro in radians for second
-//#define Gyro_Scaled_Y(x) ((x)*ToRad(Gyro_Gain_Y)) //Return the scaled ADC raw data of the gyro in radians for second
-//#define Gyro_Scaled_Z(x) ((x)*ToRad(Gyro_Gain_Z)) //Return the scaled ADC raw data of the gyro in radians for second
-//
-//// LSM303/LIS3MDL magnetometer calibration constants; use the Calibrate example from
-//// the Pololu LSM303 or LIS3MDL library to find the right values for your board
-//
+
+#define ToRad(x) ((x)*0.01745329252)  // *pi/180
+#define ToDeg(x) ((x)*57.2957795131)  // *180/pi
+
+// gyro: 2000 dps full scale
+// 70 mdps/digit; 1 dps = 0.07
+#define Gyro_Gain_X 0.07 //X axis Gyro gain
+#define Gyro_Gain_Y 0.07 //Y axis Gyro gain
+#define Gyro_Gain_Z 0.07 //Z axis Gyro gain
+#define Gyro_Scaled_X(x) ((x)*ToRad(Gyro_Gain_X)) //Return the scaled ADC raw data of the gyro in radians for second
+#define Gyro_Scaled_Y(x) ((x)*ToRad(Gyro_Gain_Y)) //Return the scaled ADC raw data of the gyro in radians for second
+#define Gyro_Scaled_Z(x) ((x)*ToRad(Gyro_Gain_Z)) //Return the scaled ADC raw data of the gyro in radians for second
+
+// LSM303/LIS3MDL magnetometer calibration constants; use the Calibrate example from
+// the Pololu LSM303 or LIS3MDL library to find the right values for your board
+
 #define M_X_MIN -1000
 #define M_Y_MIN -1000
 #define M_Z_MIN -1000
@@ -104,6 +78,22 @@ ros::Publisher imu_acc("imu_accl",&linear_acceleration);
 #define M_Y_MAX +1000
 #define M_Z_MAX +1000
 
+#define Kp_ROLLPITCH 0.02
+#define Ki_ROLLPITCH 0.00002
+#define Kp_YAW 1.2
+#define Ki_YAW 0.00002
+
+/*For debugging purposes*/
+//OUTPUTMODE=1 will print the corrected data,
+//OUTPUTMODE=0 will print uncorrected data of the gyros (with drift)
+#define OUTPUTMODE 1
+
+#define PRINT_DCM 0     //Will print the whole direction cosine matrix
+#define PRINT_ANALOGS 0 //Will print the analog raw data
+#define PRINT_EULER 0   //Will print the Euler angles Roll, Pitch and Yaw
+#define PRINT_PHANTOM 1
+
+#define STATUS_LED 13
 
 float G_Dt=0.02;    // Integration time (DCM algorithm)  We will run the integration loop at 50Hz if possible
 
@@ -127,27 +117,55 @@ float c_magnetom_y;
 float c_magnetom_z;
 float MAG_Heading;
 
+float Accel_Vector[3]= {0,0,0}; //Store the acceleration in a vector
+float Gyro_Vector[3]= {0,0,0};//Store the gyros turn rate in a vector
+float Omega_Vector[3]= {0,0,0}; //Corrected Gyro_Vector data
+float Omega_P[3]= {0,0,0};//Omega Proportional correction
+float Omega_I[3]= {0,0,0};//Omega Integrator
+float Omega[3]= {0,0,0};
+
 // Euler angles
 float roll;
 float pitch;
 float yaw;
 
+float errorRollPitch[3]= {0,0,0};
+float errorYaw[3]= {0,0,0};
 
 unsigned int counter=0;
+byte gyro_sat=0;
 
+float DCM_Matrix[3][3]= {
+  {
+    1,0,0  }
+  ,{
+    0,1,0  }  
+  ,{
+    0,0,1  }
+};
+float Update_Matrix[3][3]={{0,1,2},{3,4,5},{6,7,8}}; //Gyros here
+
+
+float Temporary_Matrix[3][3]={
+  {
+    0,0,0  }
+  ,{
+    0,0,0  }
+  ,{
+    0,0,0  }
+};
 
 void setup()
 {
-  
-  nh.initNode();
+  Serial.begin(57600);
+  pinMode (STATUS_LED,OUTPUT);  // Status LED
 
-  nh.advertise(imu_ori);
-  nh.advertise(imu_gyr);
-  nh.advertise(imu_acc);
-  
   I2C_Init();
-  
-  delay(500);
+
+  //Serial.println("Pololu MinIMU-9 + Arduino AHRS");
+
+  digitalWrite(STATUS_LED,LOW);
+  delay(1500);
 
   Accel_Init();
   Compass_Init();
@@ -169,20 +187,35 @@ void setup()
 
   AN_OFFSET[5]-=GRAVITY*SENSOR_SIGN[5];
 
-//  Serial.println("Offset:");
+  //Serial.println("Offset:");
 //  for(int y=0; y<6; y++)
 //    Serial.println(AN_OFFSET[y]);
 
+  delay(2000);
+  digitalWrite(STATUS_LED,HIGH);
+
+  timer=millis();
+  delay(20);
   counter=0;
-  loop_rate = 1000 / DEFAULT_FREQUENCY;
 }
 
 void loop() //Main Loop
 {
-
+  if((millis()-timer)>=20)  // Main loop runs at 50Hz
+  {
     counter++;
- 
+    timer_old = timer;
     timer=millis();
+    if (timer>timer_old)
+    {
+      G_Dt = (timer-timer_old)/1000.0;    // Real time of loop run. We use this on the DCM algorithm (gyro integration time)
+      if (G_Dt > 0.2)
+        G_Dt = 0; // ignore integration times over 200 ms
+    }
+    else
+      G_Dt = 0;
+
+
 
     // *** DCM algorithm
     // Data adquisition
@@ -196,23 +229,14 @@ void loop() //Main Loop
       Compass_Heading(); // Calculate magnetic heading
     }
 
-            orientation.x = magnetom_x;
-            orientation.y = magnetom_y;
-            orientation.z = magnetom_z;
-            orientation.w = 0;
-            imu_ori.publish(&orientation);
-                        
-            angular_velocity.x = gyro_x;
-            angular_velocity.y = gyro_y;
-            angular_velocity.z = gyro_z;            
-            imu_gyr.publish(&angular_velocity);
-            
-            linear_acceleration.x = accel_x;
-            linear_acceleration.y = accel_y;
-            linear_acceleration.z = accel_z;
-            imu_acc.publish(&linear_acceleration);
-            
-            nh.spinOnce();
- 
-  while ((millis() - timer) < loop_rate);
+    // Calculations...
+    Matrix_update();
+    Normalize();
+    Drift_correction();
+    Euler_angles();
+    // ***
+
+    printdata();
+  }
+
 }
