@@ -27,21 +27,17 @@ int main( int argc, char **argv )
     while( ros::ok() )
     {
         if(control.ser.available()){
-            //ROS_INFO_STREAM("Reading from serial port");
             result.data = control.ser.readline();
 	    size_t index = 0;
-            /* Locate the substring to replace. */
-	    index = result.data.find("!,DCM:", index);
+	    index = result.data.find("!,PHANTOM:", index);
             if (index == std::string::npos) continue;
-            result.data.erase(index,6);
-            //ROS_INFO_STREAM(result.data);
-            //!,DCM:-37.43,-16.24,43.51,0.70,-0.42,-0.58,0.66,0.69,0.29,0.28,-0.58,0.76
+            result.data.erase(index,10);
             std::stringstream ss(result.data);
             vect.clear();
             while (std::getline(ss, item, ',')){
 	       vect.push_back(item);
 	    }
-	    if (vect.size() == 12) {
+	    if (vect.size() == 9) {
 		for (int i=0; i< vect.size(); i++)
                     ROS_INFO_STREAM("Read: " << vect.at(i));
             }else{	
