@@ -1,0 +1,9 @@
+<!-- phantom_joystick publisher -->
+<library path="lib/phantom_sensor">
+  <class name="phantom_sensor/phantom_sensor" type="phantom_sensor" 
+    base_class_type="nodelet::Nodelet">
+    <description>
+      phantom_sensor.
+    </description>
+  </class>
+</library>
