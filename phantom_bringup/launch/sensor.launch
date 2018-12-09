@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Gamepad launch file -->
+<launch>
+<node name="phantom_sensor"  pkg="phantom_sensor" type="phantom_sensor" output="screen"/>
+</launch>
+

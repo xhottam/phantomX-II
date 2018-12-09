@@ -206,7 +206,7 @@ int main(int argc, char** argv)
     ros::AsyncSpinner spinner(1); // Using 1 threads
     spinner.start();
 
-    ros::Rate loop_rate(100); // 100 hz
+    ros::Rate loop_rate(50); // 100 hz
     while ( ros::ok() )
     {  
         phantomTeleopJoystick.publishJoinStates(&phantomTeleopJoystick.joint_state_);
