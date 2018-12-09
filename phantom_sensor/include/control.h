@@ -13,6 +13,7 @@ class Control
 
 	Control( void );
 	void publishImu( const sensor_msgs::Imu &imu_data );
+        int connect();
         int MASTER_LOOP_RATE;  // Master loop rate
 
 	sensor_msgs::Imu imu_data;
@@ -20,13 +21,10 @@ class Control
 
 
     private:
-	int connect();
 
 	ros::Time current_time_imu;
-
        // Topics we are publishing
         ros::Publisher imu_pub_;
-
 	// Node Handle
         ros::NodeHandle nh_;
 

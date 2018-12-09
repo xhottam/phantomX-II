@@ -15,11 +15,11 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_library( control src/control.cpp )
 add_dependencies( control sensor_msgs serial )
 
-add_library( imu src/control.cpp )
+add_library( imu src/imu.cpp )
 add_dependencies( imu  sensor_msgs )
 
 add_executable( phantom_sensor src/phantom_sensor.cpp )
-target_link_libraries( phantom_sensor ${catkin_LIBRARIES} )
+target_link_libraries( phantom_sensor ${catkin_LIBRARIES} control imu)
 
 install(TARGETS phantom_sensor
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
