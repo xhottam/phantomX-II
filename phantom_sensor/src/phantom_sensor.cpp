@@ -3,6 +3,7 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <control.h>
+#include <imu.h>
 
 //=============================================================================
 // Main
@@ -14,6 +15,7 @@ int main( int argc, char **argv )
 
     // Create class objects
     Control control;
+    Imu imu;
 
     control.connect();
 
@@ -38,10 +40,12 @@ int main( int argc, char **argv )
 	       vect.push_back(item);
 	    }
 	    if (vect.size() == 9) {
-		for (int i=0; i< vect.size(); i++)
-                    ROS_INFO_STREAM("Read: " << vect.at(i));
+//		for (int i=0; i< vect.size(); i++)
+//                    ROS_INFO_STREAM("Read: " << vect.at(i));
+	    imu.getImu(vect,&control.imu_data);
+            control.publishImu(&control.imu_data);
             }else{	
-		ROS_INFO_STREAM("Reads: " << vect.size());
+		ROS_INFO_STREAM("Expect 9 , Reads " << vect.size());
 	    }
         }
  	contin:;

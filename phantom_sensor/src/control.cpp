@@ -8,7 +8,6 @@ Control::Control( void )
         //Topics we are publishing
         current_time_imu = ros::Time::now();
         imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "/imu", 10 );
-
 	
 }
 
@@ -35,6 +34,8 @@ int Control::connect(){
     }
 }
 
-void Control::publishImu( const sensor_msgs::Imu &imu_data ){
+void Control::publishImu( const sensor_msgs::Imu *imu_data ){
+                                                  
+	imu_pub_.publish(*imu_data);
 }
 

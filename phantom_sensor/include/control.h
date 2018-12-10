@@ -12,7 +12,7 @@ class Control
     public:
 
 	Control( void );
-	void publishImu( const sensor_msgs::Imu &imu_data );
+	void publishImu( const sensor_msgs::Imu *imu_data );
         int connect();
         int MASTER_LOOP_RATE;  // Master loop rate
 
