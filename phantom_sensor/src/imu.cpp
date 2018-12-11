@@ -6,6 +6,11 @@ Imu::Imu( void )
 	seq = 0;
 }
 
+/**           Output angles and linear acceleration and rotational
+              velocity. Angles are in degrees, acceleration is
+              in units of 1.0 = 1/256 G (9.8/256 m/s^2). Rotational
+              velocity is in rad/s. (Output frames have form like
+*/
 void Imu::getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data){
 
 	//in AHRS firmware z axis points down, in ROS z axis points up (see REP 103)
@@ -17,15 +22,15 @@ void Imu::getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data){
             yaw_deg = yaw_deg + 360.0;
         float yaw = ToRad(yaw_deg);
         //in AHRS firmware y axis points right, in ROS y axis points left (see REP 103)
-        float pitch = -std::atof((vect.at(1)).c_str());
-        float roll = std::atof((vect.at(0)).c_str());
+        float pitch = ToRad(-std::atof((vect.at(1)).c_str()));
+        float roll = ToRad(std::atof((vect.at(0)).c_str()));
 
         // Publish message
         // AHRS firmware accelerations are negated
         // This means y and z are correct for ROS, but x needs reversing
-        imu_data->linear_acceleration.x = -std::atof((vect.at(6)).c_str());// * accel_factor
-        imu_data->linear_acceleration.y =  std::atof((vect.at(7)).c_str()); // * accel_factor
-        imu_data->linear_acceleration.z =  std::atof((vect.at(8)).c_str());// * accel_factor
+        imu_data->linear_acceleration.x = accel_factor(-std::atof((vect.at(6)).c_str()));// * accel_factor
+        imu_data->linear_acceleration.y =  accel_factor(std::atof((vect.at(7)).c_str())); // * accel_factor
+        imu_data->linear_acceleration.z =  accel_factor(std::atof((vect.at(8)).c_str()));// * accel_factor
 
         imu_data->angular_velocity.x = std::atof((vect.at(3)).c_str());
         //in AHRS firmware y axis points right, in ROS y axis points left (see REP 103)

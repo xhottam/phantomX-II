@@ -18,8 +18,13 @@
   <include file="$(find hector_mapping)/launch/mapping_default.launch"/>
   <node pkg="hector_imu_attitude_to_tf" type="imu_attitude_to_tf_node" name="imu_attitude_to_tf_node" output="screen">
 	<remap from="imu_topic" to="imu"/>
-	<param name="base_stabilized_frame" type="string" value="base_link"/>
-	<param name="base_frame" type="string" value="body_link"/>
+	    <!-- The base_stabilized frame adds information about the robot height relative to the map/odom layer -->
+            <!-- default: "base_stabilized_frame" --> 
+    <!--<param name="base_stabilized_frame" type="string" value="base_link"/> -->
+	    <!--The base_link frame is rigidly attached to the robot and adds the roll and pitch angles compared to the base_stabilized frame.robot base frame      		rotated around the roll/pitch angles reported by the IMU message -->
+	    <!-- default: "base_frame" -->
+    <!--<param name="base_frame" type="string" value="body_link"/>-->
+            <param name="base_frame" type="string" value="base_link"/>
   </node>
   <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
     <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/>
