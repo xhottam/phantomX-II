@@ -41,7 +41,7 @@ void Imu::getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data){
 	imu_data->orientation.w = q.w;
 	
         imu_data->header.stamp= ros::Time::now();
-	imu_data->header.frame_id = "base_link";
+	//imu_data->header.frame_id = "base_link";
 	imu_data->header.seq = seq++;
 
 
