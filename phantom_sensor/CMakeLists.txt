@@ -36,6 +36,10 @@ install(DIRECTORY src
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
+install(DIRECTORY 3D_visualization
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
@@ -45,7 +49,7 @@ install(FILES phantom_sensor.xml
 
 
 catkin_install_python(PROGRAMS 
-	src/display_minimuv3_visualization_from_serial.py
-        src/display_minimuv3_visualization_from_topic.py
+	3D_visualization/display_minimuv3_visualization_from_serial.py
+        3D_visualization/display_minimuv3_visualization_from_topic.py
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/src
 )
