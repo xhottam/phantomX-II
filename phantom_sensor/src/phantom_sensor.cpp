@@ -29,7 +29,7 @@ int main( int argc, char **argv )
     while( ros::ok() )
     {
         if(control.ser.available()){
-            result.data = control.ser.readline();
+/**            result.data = control.ser.readline();
 	    size_t index = 0;
 	    index = result.data.find("!,PHANTOM:", index);
             if (index == std::string::npos) continue;
@@ -47,6 +47,25 @@ int main( int argc, char **argv )
             }else{	
 		ROS_INFO_STREAM("Expect 9 , Reads " << vect.size());
 	    }
+*/
+            result.data = control.ser.readline();
+            size_t index = 0;
+            index = result.data.find("!,ANG:", index);
+            if (index == std::string::npos) continue;
+            result.data.erase(index,6);
+            std::stringstream ss(result.data);
+            vect.clear();
+            while (std::getline(ss, item, ',')){
+               vect.push_back(item);
+            }
+            if (vect.size() == 3) {
+//              for (int i=0; i< vect.size(); i++)
+//                    ROS_INFO_STREAM("Read: " << vect.at(i));
+            imu.getImu_Euler(vect,&control.euler);
+            control.publishImu_Euler(&control.euler);
+            }else{      
+                ROS_INFO_STREAM("Expect 3 , Reads " << vect.size());
+            }
         }
  	contin:;
         loop_rate.sleep();

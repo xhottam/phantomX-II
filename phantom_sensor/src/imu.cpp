@@ -5,7 +5,16 @@ Imu::Imu( void )
 {
 	seq = 0;
 }
+void Imu::getImu_Euler(std::vector<std::string> vect, std_msgs::Float32MultiArray *euler){
+	float roll  = std::atof((vect.at(0)).c_str());
+        float pitch = std::atof((vect.at(1)).c_str());
+        float yaw   = std::atof((vect.at(2)).c_str());
 
+	euler->data[0] = roll;
+        euler->data[1] = pitch;
+        euler->data[2] = yaw;
+         
+}
 /**           Output angles and linear acceleration and rotational
               velocity. Angles are in degrees, acceleration is
               in units of 1.0 = 1/256 G (9.8/256 m/s^2). Rotational

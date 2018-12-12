@@ -4,6 +4,7 @@
 
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
+#include <std_msgs/Float32MultiArray.h>
 #include <geometry_msgs/Quaternion.h>
 
 #define ToRad(x) ((x)*0.01745329252)  // *pi/180
@@ -14,6 +15,7 @@ class Imu
     public:
         Imu( void );
         void getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data);
+        void getImu_Euler(std::vector<std::string> vect, std_msgs::Float32MultiArray *euler);
     private:
         geometry_msgs::Quaternion quaternion_from_euler(float roll, float pitch, float yaw);
         
