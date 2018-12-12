@@ -25,7 +25,7 @@ int main( int argc, char **argv )
 
     ros::AsyncSpinner spinner( 2 ); // Using 2 threads
     spinner.start();
-    ros::Rate loop_rate( 100 );
+    ros::Rate loop_rate( 10 );
     while( ros::ok() )
     {
         if(control.ser.available()){
