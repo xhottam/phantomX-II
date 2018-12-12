@@ -51,6 +51,7 @@ int main( int argc, char **argv )
  	contin:;
         loop_rate.sleep();
     }
+    control.ser.close();
     return 0;
 }
 

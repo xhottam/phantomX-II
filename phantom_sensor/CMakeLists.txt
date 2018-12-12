@@ -45,6 +45,7 @@ install(FILES phantom_sensor.xml
 
 
 catkin_install_python(PROGRAMS 
-	src/display_minimuv3_visualization.py
+	src/display_minimuv3_visualization_from_serial.py
+        src/display_minimuv3_visualization_from_topic.py
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/src
 )
