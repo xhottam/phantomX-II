@@ -7,7 +7,7 @@ Control::Control( void )
         ros::param::get( "MASTER_LOOP_RATE", MASTER_LOOP_RATE );
         //Topics we are publishing
         current_time_imu = ros::Time::now();
-        imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "imu", 10 );
+        imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "imu", 5 );
 	
 }
 

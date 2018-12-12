@@ -22,6 +22,7 @@ void Imu::getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data){
             yaw_deg = yaw_deg + 360.0;
         float yaw = ToRad(yaw_deg);
         //in AHRS firmware y axis points right, in ROS y axis points left (see REP 103)
+
         float pitch = ToRad(-std::atof((vect.at(1)).c_str()));
         float roll = ToRad(std::atof((vect.at(0)).c_str()));
 
@@ -33,10 +34,10 @@ void Imu::getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data){
         imu_data->linear_acceleration.z =  accel_factor(std::atof((vect.at(8)).c_str()));// * accel_factor
 
         imu_data->angular_velocity.x = std::atof((vect.at(3)).c_str());
-        //in AHRS firmware y axis points right, in ROS y axis points left (see REP 103)
+	//in AHRS firmware y axis points right, in ROS y axis points left (see REP 103)
         imu_data->angular_velocity.y = -std::atof((vect.at(4)).c_str());
-        //inn AHRS firmware z axis points down, in ROS z axis points up (see REP 103) 
-        imu_data->angular_velocity.z = -std::atof((vect.at(5)).c_str());
+	//inn AHRS firmware z axis points down, in ROS z axis points up (see REP 103) 
+	imu_data->angular_velocity.z = -std::atof((vect.at(5)).c_str());
     
 	geometry_msgs::Quaternion q  = quaternion_from_euler(roll, pitch, yaw);
 
