@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Gamepad launch file -->
-<launch>
-<node type="display_minimuv3_visualization.py"  pkg="phantom_sensor" name="display_3D_visualization_node" output="screen"/>
-</launch>
-
