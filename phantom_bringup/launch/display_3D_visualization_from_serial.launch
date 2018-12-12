@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Gamepad launch file -->
 <launch>
-<node type="display_minimuv3_visualization_from_serial.py"  pkg="phantom_sensor" name="display_3D_visualization_node_from_serial" output="screen"/>
+<node type="display_minimuv3_visualization_from_serial.py"  pkg="phantom_sensor" name="display_3D_visualization_node_from_serial" output="screen">
+        <param name="port" value="/dev/ttyUSB1" />
+        <param name="baudrate" value="57600" />
+</node>
 </launch>
 

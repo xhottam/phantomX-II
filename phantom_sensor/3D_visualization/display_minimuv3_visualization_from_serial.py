@@ -58,9 +58,6 @@ rospy.on_shutdown(shutdown_hook)
 
 grad2rad = 3.141592/180.0
 
-# Check your COM port and baud rate
-ser = serial.Serial(port='/dev/ttyUSB1',baudrate=57600, timeout=1)
-
 # Main scene
 scene=display(title="Pololu MinIMU-9 + Arduino AHRS")
 scene.range=(1.2,1.2,1.2)
@@ -119,6 +116,21 @@ plat_arrow = arrow(color=color.green,axis=(1,0,0), shaftwidth=0.06, fixedwidth=1
 
 rospy.init_node("display_3D_visualization_node")
 
+port='/dev/ttyUSB0'
+port = rospy.get_param('~port', port)
+baudrate = 57600
+baudrate = rospy.get_param('~baudrate', baudrate)
+# Check your COM port and baud rate
+rospy.loginfo("Opening %s...", port)
+try:
+# Check your COM port and baud rate
+        ser = serial.Serial(port=port,baudrate=baudrate, timeout=1)
+except serial.serialutil.SerialException:
+        rospy.logerr("IMU not found at port "+port + ". Did you specify the correct port in the launch file?")
+        sys.exit(0)
+
+
+f
 
 f = open("Serial"+str(time())+".txt", 'w')
 
