@@ -130,7 +130,7 @@ except serial.serialutil.SerialException:
         sys.exit(0)
 
 
-f
+
 
 f = open("Serial"+str(time())+".txt", 'w')
 
