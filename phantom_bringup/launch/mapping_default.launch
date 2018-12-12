@@ -6,6 +6,8 @@
   <arg name="odom_frame" default="base_link"/>
   <arg name="pub_map_odom_transform" default="true"/>-->
 <!-- from IMU -->
+<!-- base_stabilized from hector_imu_attitude_to_tf default -->
+<!-- http://wiki.ros.org/hector_slam/Tutorials/SettingUpForYourRobot -->
 <arg name="base_frame" default="base_stabilized"/>
 <arg name="odom_frame" default="base_stabilized"/>
 <arg name="pub_map_odom_transform" default="true"/>
