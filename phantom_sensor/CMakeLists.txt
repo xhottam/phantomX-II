@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project( phantom_sensor )
 
-find_package( catkin REQUIRED COMPONENTS nodelet roscpp geometry_msgs sensor_msgs std_msgs serial )
+find_package( catkin REQUIRED COMPONENTS nodelet rospy roscpp geometry_msgs sensor_msgs std_msgs serial )
 
 
 catkin_package(
@@ -32,9 +32,19 @@ install(DIRECTORY include/${PROJECT_NAME}/
    FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h"
 )
 
+install(DIRECTORY src
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
 
 install(FILES phantom_sensor.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+
+catkin_install_python(PROGRAMS 
+	src/display_minimuv3_visualization.py
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/src
+)
