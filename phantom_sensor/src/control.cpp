@@ -5,10 +5,27 @@ Control::Control( void )
 {
 
         ros::param::get( "MASTER_LOOP_RATE", MASTER_LOOP_RATE );
+        (ros::param::get( "IMU_EULER", IMU_EULER ))?:IMU_EULER = true;
+        (ros::param::get( "IMU_PHANTOM", IMU_PHANTOM ))?:IMU_PHANTOM = false;
+
+	       
+
         //Topics we are publishing
         current_time_imu = ros::Time::now();
-        imu_pub_      = nh_.advertise<sensor_msgs::Imu>( "imu", 5 );
-        imu_pub_euler = nh_.advertise<std_msgs::Float32MultiArray>( "imu_euler", 1 );
+
+        if ( IMU_EULER ){
+		imu_pub_euler = nh_.advertise<std_msgs::Float32MultiArray>( "imu_euler", 1 );
+                imu_data_regex = "!ANG:";
+                delete_index = 5; 
+                vector_size  = 3;
+	}
+	if ( IMU_PHANTOM ){
+		imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "imu_phantom", 5 );
+                 imu_data_regex = "!,PHANTOM:";
+                 delete_index = 10;
+                 vector_size  = 9;
+	}
+        
 	
 }
 

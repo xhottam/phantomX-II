@@ -4,6 +4,11 @@
 # Controller will still have standup and sitdown functions for safty reasons 
 NON_TELEOP: false
 
+#phantom sensor publicara /imu_euler
+IMU_EULER: true
+#phantom sensor publicara /imu_phantom
+IMU_PHANTOM: true
+
 # Speed limit in Hz for the master loop rate
 MASTER_LOOP_RATE: 500
 

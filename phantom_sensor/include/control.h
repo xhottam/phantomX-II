@@ -13,17 +13,27 @@ class Control
     public:
 
 	Control( void );
-	void publishImu( const sensor_msgs::Imu *imu_data );
+
+        void publishImu( const sensor_msgs::Imu *imu_data );
         void publishImu_Euler( const std_msgs::Float32MultiArray *euler );
         int connect();
+
+        sensor_msgs::Imu imu_data;
+        std_msgs::Float32MultiArray euler;
+        serial::Serial ser;
+
+        std::string  imu_data_regex;
+        int delete_index;
+        int vector_size;
+
+        bool IMU_EULER;
+        bool IMU_PHANTOM;
         int MASTER_LOOP_RATE;  // Master loop rate
 
-	sensor_msgs::Imu imu_data;
-        std_msgs::Float32MultiArray euler;
-	serial::Serial ser;
 
 
     private:
+
 
 	ros::Time current_time_imu;
        // Topics we are publishing
@@ -31,6 +41,7 @@ class Control
         ros::Publisher imu_pub_euler;
 	// Node Handle
         ros::NodeHandle nh_;
+
 
 };
 
