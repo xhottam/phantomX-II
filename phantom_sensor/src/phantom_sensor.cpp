@@ -47,7 +47,7 @@ int main( int argc, char **argv )
 	                imu.getImu_Euler(vect,&control.euler);
         	        control.publishImu_Euler(&control.euler);
 		}else{
-			imu.getImu(vect,&control.imu_data);
+			imu.getImu_Phantom(vect,&control.imu_data);
 	                control.publishImu(&control.imu_data);
 		}  
             }else{

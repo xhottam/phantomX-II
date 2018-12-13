@@ -121,11 +121,15 @@ rospy.init_node("display_3D_visualization_node")
 imu_euler   = rospy.get_param('~IMU_EULER', true)
 imu_phantom = rospy.get_param('~IMU_PHANTOM', false)
 
-def processIMU_message(imuMsg):
+def processIMU_Phantom(imuMsg):
 
-    roll  = imuMsg.data[0]*grad2rad
-    pitch = imuMsg.data[1]*grad2rad
-    yaw   = imuMsg.data[2]*grad2rad
+    quaternion = (
+      imuMsg.orientation.x,
+      imuMsg.orientation.y,
+      imuMsg.orientation.z,
+      imuMsg.orientation.w)
+    
+    (roll,pitch,yaw) = euler_from_quaternion(quaternion)
 
     axis=(cos(pitch)*cos(yaw),-cos(pitch)*sin(yaw),sin(pitch)) 
     up=(sin(roll)*sin(yaw)+cos(roll)*sin(pitch)*cos(yaw),sin(roll)*cos(yaw)-cos(roll)*sin(pitch)*sin(yaw),-cos(roll)*cos(pitch))
@@ -147,9 +151,38 @@ def processIMU_message(imuMsg):
     L2.text = str(float(pitch))
     L3.text = str(float(yaw))        
 
+def processIMU_Euler(imuMsg):
+
+    roll  = imuMsg.data[0]*grad2rad
+    pitch = imuMsg.data[1]*grad2rad
+    yaw   = imuMsg.data[2]*grad2rad
+
+    axis=(cos(pitch)*cos(yaw),-cos(pitch)*sin(yaw),sin(pitch))
+    up=(sin(roll)*sin(yaw)+cos(roll)*sin(pitch)*cos(yaw),sin(roll)*cos(yaw)-cos(roll)*sin(pitch)*sin(yaw),-cos(roll)*cos(pitch))
+    platform.axis=axis
+    platform.up=up
+    platform.length=1.0
+    platform.width=0.65
+    plat_arrow.axis=axis
+    plat_arrow.up=up
+    plat_arrow.length=0.8
+    p_line.axis=axis
+    p_line.up=up
+    cil_roll.axis=(0.2*cos(roll),0.2*sin(roll),0)
+    cil_roll2.axis=(-0.2*cos(roll),-0.2*sin(roll),0)
+    cil_pitch.axis=(0.2*cos(pitch),0.2*sin(pitch),0)
+    cil_pitch2.axis=(-0.2*cos(pitch),-0.2*sin(pitch),0)
+    arrow_course.axis=(0.2*sin(yaw),0.2*cos(yaw),0)
+    L1.text = str(float(roll))
+    L2.text = str(float(pitch))
+    L3.text = str(float(yaw))
+
+
 if imu_euler:
-	sub = rospy.Subscriber('imu_euler', Float32MultiArray, processIMU_message)
+	rospy.loginfo("Opening IMU_Euler...")
+	sub = rospy.Subscriber('imu_euler', Float32MultiArray, processIMU_Euler)
 else:
-	sub = rospy.Subscriber('imu_phantm', Float32MultiArray, processIMU_message)
+	rospy.loginfo("Opening IMU_Phantom...")
+	sub = rospy.Subscriber('imu_phantm', Imu, processIMU_Phantom)
 rospy.spin()
 

@@ -14,7 +14,7 @@ class Imu
 {
     public:
         Imu( void );
-        void getImu( std::vector<std::string> vect, sensor_msgs::Imu *imu_data);
+        void getImu_Phantom( std::vector<std::string> vect, sensor_msgs::Imu *imu_data);
         void getImu_Euler(std::vector<std::string> vect, std_msgs::Float32MultiArray *euler);
     private:
         geometry_msgs::Quaternion quaternion_from_euler(float roll, float pitch, float yaw);
