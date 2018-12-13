@@ -17,7 +17,7 @@ int main( int argc, char **argv )
     // Create class objects
     Control control;
     Imu imu;
-
+    
     control.connect();
 
     std_msgs::String result;

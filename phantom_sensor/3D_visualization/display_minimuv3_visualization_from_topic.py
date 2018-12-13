@@ -118,8 +118,8 @@ plat_arrow = arrow(color=color.green,axis=(1,0,0), shaftwidth=0.06, fixedwidth=1
 
 rospy.init_node("display_3D_visualization_node")
 
-imu_euler   = rospy.get_param('~IMU_EULER', true)
-imu_phantom = rospy.get_param('~IMU_PHANTOM', false)
+imu_euler   = rospy.get_param('IMU_EULER', true)
+imu_phantom = rospy.get_param('IMU_PHANTOM', false)
 
 def processIMU_Phantom(imuMsg):
 
@@ -179,10 +179,10 @@ def processIMU_Euler(imuMsg):
 
 
 if imu_euler:
-	rospy.loginfo("Opening IMU_Euler...")
+	rospy.loginfo("subscribing IMU_Euler...")
 	sub = rospy.Subscriber('imu_euler', Float32MultiArray, processIMU_Euler)
 else:
-	rospy.loginfo("Opening IMU_Phantom...")
+	rospy.loginfo("subsribing IMU_Phantom...")
 	sub = rospy.Subscriber('imu_phantom', Imu, processIMU_Phantom)
 rospy.spin()
 

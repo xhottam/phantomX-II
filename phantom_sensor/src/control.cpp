@@ -5,11 +5,10 @@ Control::Control( void )
 {
 	
 	IMU_EULER   = false;
-        IMU_PHANTOM = true;
+        IMU_PHANTOM = false;
         ros::param::get( "MASTER_LOOP_RATE", MASTER_LOOP_RATE );
-	//ros::param::get( "IMU_EULER", IMU_EULER );
-	//ros::param::get( "IMU_PHANTOM", IMU_PHANTOM );
-	       
+	ros::param::get( "IMU_EULER", IMU_EULER );
+	ros::param::get( "IMU_PHANTOM", IMU_PHANTOM );
 
         //Topics we are publishing
         current_time_imu = ros::Time::now();
