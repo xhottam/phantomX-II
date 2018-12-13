@@ -183,6 +183,6 @@ if imu_euler:
 	sub = rospy.Subscriber('imu_euler', Float32MultiArray, processIMU_Euler)
 else:
 	rospy.loginfo("Opening IMU_Phantom...")
-	sub = rospy.Subscriber('imu_phantm', Imu, processIMU_Phantom)
+	sub = rospy.Subscriber('imu_phantom', Imu, processIMU_Phantom)
 rospy.spin()
 
