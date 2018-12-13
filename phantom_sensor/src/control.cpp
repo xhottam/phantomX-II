@@ -5,10 +5,10 @@ Control::Control( void )
 {
 	
 	IMU_EULER   = false;
-        IMU_PHANTOM = false;
+        IMU_PHANTOM = true;
         ros::param::get( "MASTER_LOOP_RATE", MASTER_LOOP_RATE );
-	ros::param::get( "IMU_EULER", IMU_EULER );
-	ros::param::get( "IMU_PHANTOM", IMU_PHANTOM );
+	//ros::param::get( "IMU_EULER", IMU_EULER );
+	//ros::param::get( "IMU_PHANTOM", IMU_PHANTOM );
 	       
 
         //Topics we are publishing
@@ -21,7 +21,7 @@ Control::Control( void )
                 delete_index = 5; 
                 vector_size  = 3;
 	}
-	if ( IMU_PHANTOM == false){
+	if ( IMU_PHANTOM == true ){
                 ROS_INFO_STREAM("Control pub imu_phantom");
 		imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "imu_phantom", 5 );
                 imu_data_regex = "!,PHANTOM:";
