@@ -22,7 +22,7 @@ Control::Control( void )
 	}
 	if ( IMU_PHANTOM == true ){
                 ROS_INFO_STREAM("Control pub imu_phantom");
-		imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "imu_phantom", 5 );
+		imu_pub_ = nh_.advertise<sensor_msgs::Imu>( "imu_phantom", 1 );
                 imu_data_regex = "!,PHANTOM:";
                 delete_index = 10;
                 vector_size  = 9;
