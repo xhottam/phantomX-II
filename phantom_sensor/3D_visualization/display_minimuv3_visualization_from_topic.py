@@ -118,6 +118,9 @@ plat_arrow = arrow(color=color.green,axis=(1,0,0), shaftwidth=0.06, fixedwidth=1
 
 rospy.init_node("display_3D_visualization_node")
 
+imu_euler   = rospy.get_param('~IMU_EULER', true)
+imu_phantom = rospy.get_param('~IMU_PHANTOM', false)
+
 def processIMU_message(imuMsg):
 
     roll  = imuMsg.data[0]*grad2rad
@@ -144,6 +147,9 @@ def processIMU_message(imuMsg):
     L2.text = str(float(pitch))
     L3.text = str(float(yaw))        
 
-sub = rospy.Subscriber('imu_euler', Float32MultiArray, processIMU_message)
+if imu_euler:
+	sub = rospy.Subscriber('imu_euler', Float32MultiArray, processIMU_message)
+else:
+	sub = rospy.Subscriber('imu_phantm', Float32MultiArray, processIMU_message)
 rospy.spin()
 
