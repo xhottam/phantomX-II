@@ -8,6 +8,7 @@
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
   <arg name="geotiff_map_file_path" default="$(find hector_geotiff)/maps"/>
+  <arg name="imu_type_topic" default="imu_phantom">
 
   <param name="/use_sim_time" value="false"/>
 
@@ -15,7 +16,7 @@
     args="-d $(find hector_slam_launch)/rviz_cfg/mapping_demo.rviz"/>
   <include file="$(find hector_mapping)/launch/mapping_default.launch"/>
   <node pkg="hector_imu_attitude_to_tf" type="imu_attitude_to_tf_node" name="imu_attitude_to_tf_node" output="screen"> 
-	     <remap from="imu_topic" to="imu"/>
+	     <remap from="imu_topic" to="$(arg imu_type_topic)"/>
 	    <!-- The base_stabilized frame adds information about the robot height relative to the map/odom layer -->
             <!-- default: "base_stabilized_frame" --> 
             <!--<param name="base_stabilized_frame" type="string" value="base_link"/>-->
