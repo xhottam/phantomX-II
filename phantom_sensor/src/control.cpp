@@ -8,7 +8,7 @@ Control::Control( void )
         //Topics we are publishing
         current_time_imu = ros::Time::now();
         imu_pub_      = nh_.advertise<sensor_msgs::Imu>( "imu", 5 );
-        imu_pub_euler = nh_.advertise<std_msgs::Float32MultiArray>( "imu_euler", 5 );
+        imu_pub_euler = nh_.advertise<std_msgs::Float32MultiArray>( "imu_euler", 1 );
 	
 }
 
@@ -40,5 +40,6 @@ void Control::publishImu( const sensor_msgs::Imu *imu_data ){
 	imu_pub_.publish(*imu_data);
 }
 void Control::publishImu_Euler( const std_msgs::Float32MultiArray *euler ){
+
 	imu_pub_euler.publish(*euler);
 }

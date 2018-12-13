@@ -9,10 +9,11 @@ void Imu::getImu_Euler(std::vector<std::string> vect, std_msgs::Float32MultiArra
 	float roll  = std::atof((vect.at(0)).c_str());
         float pitch = std::atof((vect.at(1)).c_str());
         float yaw   = std::atof((vect.at(2)).c_str());
-
-	euler->data[0] = roll;
-        euler->data[1] = pitch;
-        euler->data[2] = yaw;
+	
+	euler->data.clear();
+	euler->data.push_back( roll );
+        euler->data.push_back( pitch );
+        euler->data.push_back( yaw );
          
 }
 /**           Output angles and linear acceleration and rotational
