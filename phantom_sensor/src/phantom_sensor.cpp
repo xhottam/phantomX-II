@@ -43,7 +43,7 @@ int main( int argc, char **argv )
                vect.push_back(item);
              }
             if (vect.size() == control.vector_size && rubbish > 200) {
-            	if ( control.IMU_EULER ){
+            	if ( control.IMU_EULER == true ){
 	                imu.getImu_Euler(vect,&control.euler);
         	        control.publishImu_Euler(&control.euler);
 		}else{
