@@ -59,8 +59,10 @@ int BulkReadData::ReadWord(int address)
 
 ArbotixPro::ArbotixPro(PlatformArbotixPro *platform)
 {
-	m_Platform = platform;
+	m_Platform  = platform;
 	DEBUG_PRINT = false;
+        DEBUG_JOINTS= false;
+        DEBUG_ACCEL = false;
 	m_DelayedWords = 0;
 	m_bIncludeTempData = false;
 	m_BulkReadTxPacket[LENGTH] = 0;
@@ -747,16 +749,32 @@ void ArbotixPro::TxRx_CM530(int rightY,int rightX,int leftY,int leftX,int button
         txpacket[8]  = checksum;
 
 	_TxRx_CM530(txpacket,rxpacket,2);
-
-/**      int rxindex = 2;
+if (DEBUG_JOINTS){
+      int rxindex = 2;
+      int signo = 0;
       for (int j=0; j < 6 ; j++){
 	rxindex++;
-        printf("COXA [%i]: %i",j,ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));
-	printf(" | FEMUR[%i]: %i",j,ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));
-	printf(" | TIBIA[%i]: %i\n",j,ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));	
+        if(rxpacket[rxindex++] == 0){
+                signo = -1;
+        }else{
+                signo = 1;
+        }
+        printf("COXA [%i]: %i",j,signo * ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));
+        if(rxpacket[rxindex++] == 0){
+                signo = -1;
+        }else{
+                signo = 1;
+        }
+	printf(" | FEMUR[%i]: %i",j,signo * ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));
+        if(rxpacket[rxindex++] == 0){
+                signo = -1;
+        }else{
+                signo = 1;
+        }
+	printf(" | TIBIA[%i]: %i\n",j,signo * ArbotixPro::MakeWord(rxpacket[rxindex++],rxpacket[rxindex++]));	
       }
-*/        
-
+       
+}
 }
 
 void  ArbotixPro::_TxRx_CM530(unsigned char *txpacket,unsigned char *rxpacket,int priority){
@@ -773,7 +791,7 @@ void  ArbotixPro::_TxRx_CM530(unsigned char *txpacket,unsigned char *rxpacket,in
 
         int res = 0;
         int get_length = 0;
-        int to_length = 45;
+        int to_length = 63;
 while(1)
 {
         int length = m_Platform->ReadPort(&rxpacket[get_length], to_length - get_length);

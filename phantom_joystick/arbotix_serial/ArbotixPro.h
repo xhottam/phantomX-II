@@ -171,6 +171,8 @@ namespace Robot
 
 		public:
 			bool DEBUG_PRINT;
+                        bool DEBUG_JOINTS;
+                        bool DEBUG_ACCEL;
 			BulkReadData m_BulkReadData[ID_BROADCAST];
 			int m_DelayedWord[10];
 			int m_DelayedAddress[10];
