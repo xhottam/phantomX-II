@@ -10,6 +10,8 @@ VERSION=$( sed -n '/SOURCE_VERSION/s/^.*"\(.*\)".*$/\1/gp' < mjpg_streamer.h )
 REVISION=$( svnversion -cn | sed "s/.*://" )
 sudo checkinstall --pkgname=mjpg-streamer --pkgversion="$VERSION+$REVISION~checkinstall" --default 
 
+mjpg_streamer  -i "input_uvc.so -d /dev/video0 -y -r 352x288 -f 10"  -o "output_http.so -p 8080 -w /usr/local/www" 
+
 https://wiki.ubuntuusers.de/MJPG-Streamer/
 
 
