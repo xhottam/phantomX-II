@@ -3,7 +3,7 @@
 sudo apt-get install build-essential libjpeg-dev imagemagick subversion libv4l-dev checkinstall 
 svn co svn://svn.code.sf.net/p/mjpg-streamer/code/ mjpg-streamer 
 cd mjpg-streamer/mjpg-streamer 
-make
+make || make USE_LIBV4L2=true 
 sudo make install 
 
 VERSION=$( sed -n '/SOURCE_VERSION/s/^.*"\(.*\)".*$/\1/gp' < mjpg_streamer.h )
