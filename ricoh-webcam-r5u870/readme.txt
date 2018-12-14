@@ -6,6 +6,7 @@ cd mjpg-streamer/mjpg-streamer
 make || make USE_LIBV4L2=true 
 sudo make install 
 
+###o con  checkinstall (entonces el programa puede ser desinstalado fácilmente otra vez).
 VERSION=$( sed -n '/SOURCE_VERSION/s/^.*"\(.*\)".*$/\1/gp' < mjpg_streamer.h )
 REVISION=$( svnversion -cn | sed "s/.*://" )
 sudo checkinstall --pkgname=mjpg-streamer --pkgversion="$VERSION+$REVISION~checkinstall" --default 
