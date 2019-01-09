@@ -30,3 +30,13 @@ Run: sudo r5u87x-loader --reload, If you get a successfully uploaded -message, r
 I haven't had success with taking any pictures with the R5U870 of higher resolution than 352x288. I would love to hear if someone gets undistorted pictures with full resolution.
 
 https://github.com/DigitalFabricationStudio/Project_0.2/tree/master/valtteri.wikstrom/Project/frame-source
+
+
+## usb_cam
+v4l2-ctl -d /dev/video0 --list-formats-ext
+
+sudo apt-get install v4l-utils ros-indigo-usb-cam ros-indigo-image-view ros-indigo-camera-calibration
+
+rqt_image_view
+roslaunch phantom_bringup image_view.launch
+rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025  image:=/usb_cam/image_raw
