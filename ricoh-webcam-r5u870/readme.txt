@@ -11,6 +11,8 @@ VERSION=$( sed -n '/SOURCE_VERSION/s/^.*"\(.*\)".*$/\1/gp' < mjpg_streamer.h )
 REVISION=$( svnversion -cn | sed "s/.*://" )
 sudo checkinstall --pkgname=mjpg-streamer --pkgversion="$VERSION+$REVISION~checkinstall" --default 
 
+
+export LD_LIBRARY_PATH=/usr/local/lib
 mjpg_streamer  -i "input_uvc.so -d /dev/video0 -y -r 352x288 -f 10"  -o "output_http.so -p 8080 -w /usr/local/www" 
 mjpg_streamer  -i "input_uvc.so -d /dev/video0 -yuv -r 352x288 -f 10"  -o "output_http.so -p 8080 -w /usr/local/www"
 https://wiki.ubuntuusers.de/MJPG-Streamer/
@@ -40,3 +42,7 @@ sudo apt-get install v4l-utils ros-indigo-usb-cam ros-indigo-image-view ros-indi
 rqt_image_view
 roslaunch phantom_bringup image_view.launch
 rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025  image:=/usb_cam/image_raw
+
+
+sudo apt-get install ros-indigo-uvc-camera ros-indigo-cv-camera ros-indigo-libuvc-camera ros-indigo-gscam gstreamer0.10-plugins-good
+
