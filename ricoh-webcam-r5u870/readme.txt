@@ -46,3 +46,5 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025  image:=
 
 sudo apt-get install ros-indigo-uvc-camera ros-indigo-cv-camera ros-indigo-libuvc-camera ros-indigo-gscam gstreamer0.10-plugins-good
 
+
+https://answers.ros.org/question/276004/rviz-no-image-received/

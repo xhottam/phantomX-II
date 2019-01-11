@@ -8,10 +8,10 @@
       <param name="index" value="0"/>
 
       <!-- Image size and type -->
-      <param name="width" value="352"/>
-      <param name="height" value="288"/>
+      <param name="width" value="320"/> 
+      <param name="height" value="240"/> 
       <!-- choose whichever uncompressed format the camera supports: -->
-      <param name="video_mode" value="yuv"/> <!-- or yuyv/nv12/mjpeg -->
-      <param name="frame_rate" value="10"/>
+      <param name="video_mode" value="yuvy"/><!-- or yuyv/nv12/mjpeg -->
+      <param name="frame_rate" value="30"/>
     </node>
 </launch>
