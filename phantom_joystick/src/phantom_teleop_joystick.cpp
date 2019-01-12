@@ -9,7 +9,7 @@
 
 
 using namespace Robot;
-LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB0");
+LinuxArbotixPro linux_arbotixpro("/dev/ttyUSB2");
 ArbotixPro arbotixpro(&linux_arbotixpro);
 
 //==============================================================================

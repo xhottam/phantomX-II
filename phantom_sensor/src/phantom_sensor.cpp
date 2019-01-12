@@ -50,9 +50,9 @@ int main( int argc, char **argv )
 			imu.getImu_Phantom(vect,&control.imu_data);
 	                control.publishImu(&control.imu_data);
 		}  
-            }else{
+            }/**else{
                 ROS_INFO_STREAM("Reads " << vect.size());
-            }
+            }*/
 
 /**            index = result.data.find("!ANG:", index);
             if (index == std::string::npos) continue;
