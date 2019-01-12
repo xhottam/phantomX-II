@@ -41,8 +41,7 @@ sudo apt-get install v4l-utils ros-indigo-usb-cam ros-indigo-image-view ros-indi
 
 rqt_image_view
 roslaunch phantom_bringup image_view.launch
-rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025  image:=/usb_cam/image_raw
-
+rosrun camera_calibration cameracalibrator.py   --size 8x6 --square 0.020 image:=/image_raw camera:=/my_cam  --no-service-check
 
 sudo apt-get install ros-indigo-uvc-camera ros-indigo-cv-camera ros-indigo-libuvc-camera ros-indigo-gscam gstreamer0.10-plugins-good
 
