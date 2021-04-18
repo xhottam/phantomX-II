@@ -1,0 +1,59 @@
+apt-cache search libavcodec
+sudo apt-get install libbluetooth-dev libjpeg-dev libusb-dev liburdfdom-dev libconsole-bridge-dev libyaml-cpp-dev libavcodec-dev libswscale-dev jstest-gtk
+
+git https://github.com/Interbotix/HROS1-Framework.git
+cd /home/pi/HROS1-Framework/Linux/build
+@@@@@@@@@@@@@@@@  const constexpr @@@@@@@@@@@@@@@@
+
+vi ../../Framework/include/AXDXL.h
+vi ../../Framework/include/Kinematics.h
+vi ../../Framework/include/Camera.h
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+sudo make all
+
+https://varhowto.com/install-ros-noetic-raspberry-pi-4/
+
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu buster main" > /etc/apt/sources.list.d/ros-noetic.list'
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+sudo apt update
+sudo apt-get install -y python-rosdep python-rosinstall-generator python-wstool python-rosinstall build-essential cmake
+sudo rosdep init
+rosdep update
+mkdir ~/ros_catkin_ws
+cd ~/ros_catkin_ws
+rosinstall_generator ros_comm --rosdistro noetic --deps --wet-only --tar > noetic-ros_comm-wet.rosinstall
+wstool init src noetic-ros_comm-wet.rosinstall
+rosdep install -y --from-paths src --ignore-src --rosdistro noetic -r --os=debian:buster
+
+@@@@@@CONF_SWAPSIZE=1024@@@@@@
+sudoedit /etc/dphys-swapfile
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+       git clone https://github.com/xhottam/phantomX-II.git
+       git clone https://github.com/ros/urdf.git -b melodic-devel
+       git clone  https://github.com/ros/nodelet_core.git -b noetic-devel
+       git clone  https://github.com/ros/bond_core.git -b kinetic-devel
+       git clone  https://github.com/ros/common_msgs.git common_msgs_extra -b noetic-devel
+       git clone https://github.com/wjwwood/serial.git
+       git clone  https://github.com/ros/dynamic_reconfigure.git -b noetic-devel
+       git clone  https://github.com/ros/nodelet_core.git -b noetic-devel
+       git clone https://github.com/ros/diagnostics.git -b noetic-devel
+       git clone https://github.com/ros/roslint.git
+       git clone https://github.com/xhottam/phantomX-II.git
+       git clone https://github.com/ros/urdf.git
+       git clone https://github.com/ros/rosconsole_bridge.git -b kinetic-devel
+       git clone https://github.com/ros/xacro.git
+       git clone https://github.com/ros-drivers/usb_cam.git -b develop
+       git clone https://github.com/ros-drivers/rosserial.git -b noetic-devel 
+       git clone https://github.com/ros-perception/image_common.git -b noetic-devel
+		        nano src/image_common/camera_calibration_parsers/CMakeLists.txt (line 7 remove python)		
+       git clone https://github.com/ros-drivers/joystick_drivers
+		        rm -rf src/joystick_drivers/spacenav_node/
+		        rm -rf src/joystick_drivers/wiimote/
+
+
+ src/catkin/bin/catkin_make -DCMAKE_BUILD_TYPE=Release -j4 -DPYTHON_EXECUTABLE=/usr/bin/python3
+ src/catkin/bin/catkin_make  -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic -DCATKIN_WHITELIST_PACKAGES=camera_calibration_parsers -DPYTHON_EXECUTABLE=/usr/bin/python3
