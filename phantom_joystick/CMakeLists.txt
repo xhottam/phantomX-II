@@ -12,11 +12,11 @@ catkin_package(
   CATKIN_DEPENDS nodelet roscpp sensor_msgs
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS} /home/odroid/PhantomII-Framework/Framework/include /home/odroid/PhantomII-Framework/Linux/include ) 
+include_directories(include ${catkin_INCLUDE_DIRS} /home/pi/HROS1-Framework/Framework/include /home/pi/HROS1-Framework/Linux/include )
 
 add_executable( phantom_joystick src/phantom_teleop_joystick.cpp ) 
 #link_directories( /home/ros/HROS1-Framework/Linux/lib )
-target_link_libraries( phantom_joystick ${catkin_LIBRARIES} /home/odroid/PhantomII-Framework/Linux/lib/darwin.a )
+target_link_libraries( phantom_joystick ${catkin_LIBRARIES} /home/pi/HROS1-Framework/Linux/lib/darwin.a )
 #add_dependencies( phantom_joystick )
 
 install(TARGETS phantom_joystick
