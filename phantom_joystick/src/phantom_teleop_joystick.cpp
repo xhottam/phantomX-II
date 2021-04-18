@@ -48,9 +48,15 @@ PhantomTeleopJoystick::PhantomTeleopJoystick( void )
     
     if (NON_TELEOP == false){
             //arbotixpro.DEBUG_JOINTS = true;
-	    if (arbotixpro.Connect() == true){
+            do
+            {
+                ROS_INFO("-- PhantomTeleopjoystick constructor (trying to connect CM530) --");
+                ros::Duration(15).sleep();
+            } while (!arbotixpro.Connect() == true);
+
+            if (arbotixpro.Connect() == true){
                 timer_Write = nh_.createTimer(ros::Duration(0.04), boost::bind(&PhantomTeleopJoystick::Write_Read_CM530, this));
-	    }
+            }
     }
    
 
