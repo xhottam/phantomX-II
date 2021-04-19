@@ -57,3 +57,7 @@ sudo dphys-swapfile swapon
 
  src/catkin/bin/catkin_make -DCMAKE_BUILD_TYPE=Release -j4 -DPYTHON_EXECUTABLE=/usr/bin/python3
  src/catkin/bin/catkin_make  -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic -DCATKIN_WHITELIST_PACKAGES=camera_calibration_parsers -DPYTHON_EXECUTABLE=/usr/bin/python3
+ 
+  /etc/udev/rules.d/73-joy-aliases.rules
+  SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony Playstation SixAxis/DS3", SYMLINK+="input/ps3"
+  sudo service udev restart
