@@ -58,25 +58,23 @@ sudo dphys-swapfile swapon
  src/catkin/bin/catkin_make -DCMAKE_BUILD_TYPE=Release -j4 -DPYTHON_EXECUTABLE=/usr/bin/python3
  src/catkin/bin/catkin_make  -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic -DCATKIN_WHITELIST_PACKAGES=camera_calibration_parsers -DPYTHON_EXECUTABLE=/usr/bin/python3
  
- [python2.7]
- sudo python -m pip install pybluez==0.22
  
+ /etc/udev/rules.d/73-joy-aliases.rules
+ SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony PLAYSTATION(R)3 Controller", SYMLINK+="input/ps3"
+ sudo service udev restart
+ sudo chmod a+rw /dev/input/jsX
+
  Plug the USB bluetooth dongle into your computer. Then, plug the PS3 bluetooth joystick into the computer using a USB cable.
  Load the bluetooth dongle's MAC address into the PS3 joystick using:
  $ sudo bash
  $ rosrun ps3joy sixpair
  
- Press Ctrl-D now so that you do not continue to run as root.
- If you get something like the following
-	Current Bluetooth master: 00:1b:dc:00:07:3c
-	Unable to retrieve local bd_addr from `hcitool dev`.
-	Please enable Bluetooth or specify an address manually.
-Run the command:
-$ hciconfig hci0 reset
-and then retry:
-$ rosrun ps3joy sixpair
+ #OJO[python2.7]
+ sudo python -m pip install pybluez==0.22
  
- /etc/udev/rules.d/73-joy-aliases.rules
- SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony Playstation SixAxis/DS3", SYMLINK+="input/ps3"
- sudo service udev restart
- sudo chmod a+rw /dev/input/jsX
+ $ sudo bash
+ $ rosrun ps3joy ps3joy.py
+ $ exit
+
+ 
+ 
