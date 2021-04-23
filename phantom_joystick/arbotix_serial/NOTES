@@ -8,3 +8,6 @@
 if(read(fd, buf, 1)==-1) {
     printf("Oh dear, something went wrong with read()! %s\n", strerror(errno));
 }
+
+
+############ SERIAL/READ print error ############
