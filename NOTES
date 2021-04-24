@@ -17,6 +17,11 @@ rosinstall_generator ros_comm --rosdistro noetic --deps --wet-only --tar > noeti
 wstool init src noetic-ros_comm-wet.rosinstall
 rosdep install -y --from-paths src --ignore-src --rosdistro noetic -r --os=debian:buster
 
+sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/noetic -j1 -DPYTHON_EXECUTABLE=/usr/bin/python3
+echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc  
+bash source
+bash
+
 @@@@@@CONF_SWAPSIZE=1024@@@@@@
 sudoedit /etc/dphys-swapfile
 sudo dphys-swapfile setup
