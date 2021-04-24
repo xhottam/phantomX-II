@@ -55,6 +55,8 @@ sudo make all
  SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony PLAYSTATION(R)3 Controller", SYMLINK+="input/ps3"
  sudo service udev restart
  sudo chmod a+rw /dev/input/jsX
+ 
+ KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0777", SYMLINK+="rplidar"
 
  Plug the USB bluetooth dongle into your computer. Then, plug the PS3 bluetooth joystick into the computer using a USB cable.
  Load the bluetooth dongle's MAC address into the PS3 joystick using:
