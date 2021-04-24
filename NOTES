@@ -23,6 +23,7 @@ rosdep update
 mkdir ~/ros_catkin_ws
 cd ~/ros_catkin_ws
 rosinstall_generator ros_comm --rosdistro noetic --deps --wet-only --tar > noetic-ros_comm-wet.rosinstall
+rosinstall_generator nodelet_core bond_core common_msgs serial dynamic_reconfigure rplidar_ros diagnostics roslint  joystick_drivers urdf rosconsole_bridge xacro usb_cam image_common rosserial --rosdistro noetic --deps --wet-only --tar > noetic-phantom-dependencies .rosinstall
 wstool init src noetic-ros_comm-wet.rosinstall
 rosdep install -y --from-paths src --ignore-src --rosdistro noetic -r --os=debian:buster
 
