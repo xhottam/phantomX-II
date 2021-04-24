@@ -1,3 +1,4 @@
+#!/bin/bash
 ### BEGIN INIT INFO
 # Provides:          ps3joy
 # Required-Start:    
@@ -12,11 +13,11 @@
 
 #APP_PATH=""
 
-. /home/pi/ros_catkin_ws/devel/setup.bash
+. /home/pi/catkin_ws/devel/setup.bash
 export ROS_HOME=/root
 
 # path to daemon
-DAEMON=/home/pi/ros_catkin_ws/src/joystick_drivers/ps3joy/scripts/ps3joy.py
+DAEMON=/home/pi/catkin_ws/src/joystick_drivers/ps3joy/scripts/ps3joy.py
 
 # startup args
 DAEMON_OPTS="--inactivity-timeout=900 --continuous-output"
