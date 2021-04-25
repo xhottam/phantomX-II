@@ -26,15 +26,15 @@
         <param name="port" value="/dev/ttyUSB1" />
         <param name="baud" value="57600" />
     </node>-->
-   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
-    <param name="video_device" value="/dev/video0" />
-    <param name="image_width" value="320" />
-    <param name="image_height" value="240" />
-    <param name="pixel_format" value="yuyv" />
-    <param name="camera_frame_id" value="usb_cam" />
-    <param name="io_method" value="mmap"/>
-    <param name="framerate" value="30" />
-    <param name="camera_info_url" value="file:///home/pi/ros_catkin_ws/src/phantom_bringup/launch/R5U870_.yaml"/>
-    <param name="camera_name" value="camera" />
-  </node>
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+     <param name="video_device" value="/dev/video0" />
+     <param name="image_width" value="320" />
+     <param name="image_height" value="240" />
+     <param name="pixel_format" value="yuyv" />
+     <param name="camera_frame_id" value="usb_cam" />
+     <param name="io_method" value="mmap"/>
+     <param name="framerate" value="30" />
+     <param name="camera_info_url" value="file:///home/pi/ros_catkin_ws/src/phantom_bringup/launch/R5U870_.yaml"/>
+     <param name="camera_name" value="camera" />
+    </node>
 </launch>
