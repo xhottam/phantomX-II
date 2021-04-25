@@ -2,19 +2,18 @@
 <!-- Gamepad launch file -->
 
 <launch>
+    <!-- PS3JOY -->
     <arg name="joy_mapping" default="ps3"/>
-    <arg name="imu_port" default="/dev/ttyUSB1"/>
-    <arg name="imu_baud" default="57600"/>
-    <arg name="rplidar_port" default="/dev/ttyUSB2"/>
     <rosparam command="load" file="$(find phantom_description)/params/$(arg joy_mapping).yaml" />
-    <node name="phantom_sensor" pkg="phantom_sensor" type="phantom_sensor" output="screen"/>
     <node name="Playstation3_Controller" pkg="joy" type="joy_node">
      <!--<param name="deadzone" value="0.05" />
      <param name="coalesce_interval" value="1.0" />
      <param name="autorepeat_rate" value="0.0"/>-->
      <param name="dev" type="string" value="/dev/input/ps3"/>
     </node>
-    <node name="Phantom_Teleop_Joystick" pkg="phantom_joystick" type="phantom_joystick" output="screen"/>
+    <!-- PS3JOY -->
+    <!-- RPLIDAR -->
+    <arg name="rplidar_port" default="/dev/ttyUSB2"/>
     <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
      <param name="serial_port"         type="string" value="/dev/ttyUSB2"/>
      <param name="serial_baudrate"     type="int"    value="115200"/>
@@ -22,10 +21,20 @@
      <param name="inverted"            type="bool"   value="false"/>
      <param name="angle_compensate"    type="bool"   value="true"/>
     </node>
+    <!-- RPLIDAR -->
+    <!-- IMU -->
+    <param name="IMU_EULER" type="bool" value="false"/>
+    <param name="IMU_PHANTOM" type="bool" value="true"/>
+    <arg name="imu_type_topic" default="imu_phantom"/>
+    <arg name="imu_port" default="/dev/ttyUSB1"/>
+    <arg name="imu_baud" default="57600"/>
+    <node name="phantom_sensor" pkg="phantom_sensor" type="phantom_sensor" output="screen"/>
     <!--<node name="imu_node" pkg="rosserial_python" type="serial_node.py" output="screen">
-        <param name="port" value="/dev/ttyUSB1" />
-        <param name="baud" value="57600" />
+     <param name="port" value="/dev/ttyUSB1" />
+     <param name="baud" value="57600" />
     </node>-->
+    <!-- IMU -->
+    <!-- USB_CAM -->
     <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
      <param name="video_device" value="/dev/video0" />
      <param name="image_width" value="320" />
@@ -37,4 +46,6 @@
      <param name="camera_info_url" value="file:///home/pi/ros_catkin_ws/src/phantom_bringup/launch/R5U870_.yaml"/>
      <param name="camera_name" value="camera" />
     </node>
+    <!-- USB_CAM -->
+    <node name="Phantom_Teleop_Joystick" pkg="phantom_joystick" type="phantom_joystick" output="screen"/>
 </launch>
