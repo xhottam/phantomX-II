@@ -43,7 +43,7 @@
      <param name="camera_frame_id" value="usb_cam" />
      <param name="io_method" value="mmap"/>
      <param name="framerate" value="30" />
-     <param name="camera_info_url" value="file:///home/pi/ros_catkin_ws/src/phantom_bringup/launch/R5U870_.yaml"/>
+     <param name="camera_info_url" value="file:///home/pi/catkin_ws/src/phantom_bringup/launch/R5U870_.yaml"/>
      <param name="camera_name" value="camera" />
     </node>
     <!-- USB_CAM -->
