@@ -52,47 +52,40 @@
 class PhantomTeleopJoystick
 {
 public:
-	PhantomTeleopJoystick( void );
+        PhantomTeleopJoystick( void );
         void publishJoinStates(sensor_msgs::JointState *joint_state);
+
         sensor_msgs::JointState joint_state_;
-	
+
         unsigned char checksum;
-        unsigned char header_1;
-        unsigned char header_2;
         unsigned char extra;
 	unsigned char buttons;
         unsigned char leftX;
         unsigned char leftY;
         unsigned char rightX;
         unsigned char rightY;
-        bool arbotix_con_feed;
-
         bool NON_TELEOP;
-        unsigned char * rxpacket;
+        unsigned char * rxpacket[63];
 
 private:
         void joyCallback( const sensor_msgs::Joy::ConstPtr &joy );
 	int mapa(double x, double in_min, double in_max, double out_min, double out_max);
         int makeword(int lowbyte, int highbyte,bool feed,int index);
-
         void Write_Read_CM530();
-        
+
 	ros::NodeHandle nh_;
 	ros::Subscriber joy_sub_;
-
         ros::Publisher phantom_joint_state;
+	ros::Timer timer_Write;
+	XmlRpc::XmlRpcValue SERVOS;
+	std::vector<std::string> servo_map_key_;
+	std::vector<std::string> servo_names_;
+	std::vector<int> servo_orientation_;
 
         int NUMBER_OF_LEGS;
-	int NUMBER_OF_LEG_JOINTS;
+				int NUMBER_OF_LEG_JOINTS;
         double DEADBAND;
         double SCALE;
         double OFFSET;
-
-	ros::Timer timer_Write;
-
-	XmlRpc::XmlRpcValue SERVOS;
-        std::vector<std::string> servo_map_key_;
-        std::vector<std::string> servo_names_;
-        std::vector<int> servo_orientation_;
 };
 #endif // PHANTOM_TELEOP_H_

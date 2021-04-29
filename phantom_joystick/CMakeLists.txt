@@ -1,7 +1,4 @@
 cmake_minimum_required(VERSION 2.8.3)
-
-set( CMAKE_CXX_FLAGS "-pthread")
-
 project(phantom_joystick)
 
 find_package( catkin REQUIRED COMPONENTS nodelet roscpp sensor_msgs )
@@ -12,12 +9,17 @@ catkin_package(
   CATKIN_DEPENDS nodelet roscpp sensor_msgs
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS} /home/pi/HROS1-Framework/Framework/include /home/pi/HROS1-Framework/Linux/include )
+include_directories(include ${catkin_INCLUDE_DIRS} )
+
+add_library( linuxarbotixpro src/LinuxArbotixPro.cpp )
+#add_dependencies( linuxarbotixpro )
+
+add_library( arbotixpro src/ArbotixPro.cpp )
+add_dependencies( arbotixpro linuxarbotixpro)
+
 
 add_executable( phantom_joystick src/phantom_teleop_joystick.cpp ) 
-#link_directories( /home/ros/HROS1-Framework/Linux/lib )
-target_link_libraries( phantom_joystick ${catkin_LIBRARIES} /home/pi/HROS1-Framework/Linux/lib/darwin.a )
-#add_dependencies( phantom_joystick )
+target_link_libraries( phantom_joystick ${catkin_LIBRARIES} linuxarbotixpro arbotixpro)
 
 install(TARGETS phantom_joystick
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

@@ -9,7 +9,7 @@
      <!--<param name="deadzone" value="0.05" />
      <param name="coalesce_interval" value="1.0" />
      <param name="autorepeat_rate" value="0.0"/>-->
-     <param name="dev" type="string" value="/dev/input/ps3"/>
+     <param name="dev" type="string" value="/dev/input/js0"/>
     </node>
     <!-- PS3JOY -->
     <!-- RPLIDAR -->
@@ -47,5 +47,7 @@
      <param name="camera_name" value="camera" />
     </node>
     <!-- USB_CAM -->
+    <rosparam command="load" file="$(find phantom_description)/params/dynamixel.yaml"/>
+    <rosparam command="load" file="$(find phantom_description)/params/phantom.yaml" />
     <node name="Phantom_Teleop_Joystick" pkg="phantom_joystick" type="phantom_joystick" output="screen"/>
 </launch>
