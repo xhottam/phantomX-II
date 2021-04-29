@@ -92,6 +92,23 @@ bool LinuxArbotixPro::OpenPort(bool loglevel)
 		}
         }
 
+
+        if (ioctl(m_Socket_fd, TIOCGSERIAL, &serinfo) < 0)
+                goto UART_OPEN_ERROR;
+
+        //udevadm info -a -p  $(udevadm info -q path -n /dev/ttyUSB0) | grep latency
+        //ATTRS{latency_timer}=="16" TO  ATTRS{latency_timer}=="1"
+        serinfo.flags |= ASYNC_LOW_LATENCY;
+
+        if (ioctl(m_Socket_fd, TIOCSSERIAL, &serinfo) < 0)
+                {
+                        if (DEBUG_COM == true)
+                                printf("failed!\n");
+                        goto UART_OPEN_ERROR;
+                }
+
+
+        tcflush(m_Socket_fd, TCIFLUSH);
 	m_ByteTransferTime = (1000.0 / baudrate) * 12.0;
 	return true;
 

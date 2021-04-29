@@ -1,0 +1,6 @@
+# Allow serial devices to be read by anyone
+
+KERNEL=="ttyUSB*", MODE:="0666"
+KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTR{latency_timer}="1"
+KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="rplidar"
+#SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony PLAYSTATION(R)3 Controller",  MODE:="0666", SYMLINK+="input/ps3"
