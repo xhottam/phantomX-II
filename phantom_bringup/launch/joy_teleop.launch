@@ -2,6 +2,9 @@
 <!-- Gamepad launch file -->
 
 <launch>
+
+    <rosparam command="load" file="$(find phantom_description)/params/dynamixel.yaml"/>
+    <rosparam command="load" file="$(find phantom_description)/params/phantom.yaml" />
     <!-- PS3JOY -->
     <arg name="joy_mapping" default="ps3"/>
     <rosparam command="load" file="$(find phantom_description)/params/$(arg joy_mapping).yaml" />
@@ -35,7 +38,7 @@
     </node>-->
     <!-- IMU -->
     <!-- USB_CAM -->
-    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <!--<node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
      <param name="video_device" value="/dev/video0" />
      <param name="image_width" value="320" />
      <param name="image_height" value="240" />
@@ -45,9 +48,7 @@
      <param name="framerate" value="30" />
      <param name="camera_info_url" value="file:///home/pi/catkin_ws/src/phantom_bringup/launch/R5U870_.yaml"/>
      <param name="camera_name" value="camera" />
-    </node>
+    </node>-->
     <!-- USB_CAM -->
-    <rosparam command="load" file="$(find phantom_description)/params/dynamixel.yaml"/>
-    <rosparam command="load" file="$(find phantom_description)/params/phantom.yaml" />
     <node name="Phantom_Teleop_Joystick" pkg="phantom_joystick" type="phantom_joystick" output="screen"/>
 </launch>
