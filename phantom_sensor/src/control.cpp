@@ -52,6 +52,7 @@ int Control::connect(){
     }else{
         return -1;
     }
+    return 0;
 }
 
 void Control::publishImu( const sensor_msgs::Imu *imu_data ){

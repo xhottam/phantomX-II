@@ -32,15 +32,16 @@ sudo dphys-swapfile swapon
 mkdir ~/catkin_ws/src
 cd catkin_ws
 catkin_make
-rosinstall_generator nodelet_core bond_core common_msgs serial dynamic_reconfigure rplidar_ros diagnostics roslint  joystick_drivers urdf rosconsole_bridge xacro usb_cam image_common rosserial --rosdistro noetic --deps --wet-only --tar > noetic-phantom-dependencies .rosinstall
-wstool init src noetic-phantom-dependencies .rosinstall
+rosinstall_generator nodelet_core bond_core common_msgs serial dynamic_reconfigure rplidar_ros diagnostics roslint  joystick_drivers urdf rosconsole_bridge xacro usb_cam image_common rosserial --rosdistro noetic --deps --wet-only --tar > noetic-phantom-dependencies.rosinstall
+wstool init src noetic-phantom-dependencies.rosinstall
 rosdep install -y --from-paths src --ignore-src --rosdistro noetic -r --os=debian:buster
+catkin_make -DCMAKE_BUILD_TYPE=Release -j4
 
- src/catkin/bin/catkin_make -DCMAKE_BUILD_TYPE=Release -j4 -DPYTHON_EXECUTABLE=/usr/bin/python3
- src/catkin/bin/catkin_make  -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic -DCATKIN_WHITELIST_PACKAGES=camera_calibration_parsers -DPYTHON_EXECUTABLE=/usr/bin/python3
+src/catkin/bin/catkin_make -DCMAKE_BUILD_TYPE=Release -j4 -DPYTHON_EXECUTABLE=/usr/bin/python3
+src/catkin/bin/catkin_make  -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic -DCATKIN_WHITELIST_PACKAGES=camera_calibration_parsers -DPYTHON_EXECUTABLE=/usr/bin/python3
  
  
- git https://github.com/Interbotix/HROS1-Framework.git
+git https://github.com/Interbotix/HROS1-Framework.git
 cd /home/pi/HROS1-Framework/Linux/build
 @@@@@@@@@@@@@@@@  const constexpr @@@@@@@@@@@@@@@@
 
@@ -51,12 +52,17 @@ vi ../../Framework/include/Camera.h
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 sudo make all
  
- /etc/udev/rules.d/73-joy-aliases.rules
- SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony PLAYSTATION(R)3 Controller", SYMLINK+="input/ps3"
- sudo service udev restart
- sudo chmod a+rw /dev/input/jsX
+
  
- KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0777", SYMLINK+="rplidar"
+ 
+ /etc/udev/rules.d/73-joy-aliases.rules
+ 
+ KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0666", SYMLINK+="rplidar"
+ SUBSYSTEMS=="input", KERNEL=="js[0-9]*", ATTRS{name}=="Sony PLAYSTATION(R)3 Controller",  MODE:="0666", SYMLINK+="input/ps3"
+ sudo service udev restart
+ sudo chmod a+rw /dev/input/ps3
+ 
+
 
  Plug the USB bluetooth dongle into your computer. Then, plug the PS3 bluetooth joystick into the computer using a USB cable.
  Load the bluetooth dongle's MAC address into the PS3 joystick using:
