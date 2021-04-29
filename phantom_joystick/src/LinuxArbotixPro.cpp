@@ -92,7 +92,7 @@ bool LinuxArbotixPro::OpenPort(bool loglevel)
 		}
         }
 
-
+/*
         if (ioctl(m_Socket_fd, TIOCGSERIAL, &serinfo) < 0)
                 goto UART_OPEN_ERROR;
 
@@ -106,7 +106,7 @@ bool LinuxArbotixPro::OpenPort(bool loglevel)
                                 printf("failed!\n");
                         goto UART_OPEN_ERROR;
                 }
-
+*/
 
         tcflush(m_Socket_fd, TCIFLUSH);
 	m_ByteTransferTime = (1000.0 / baudrate) * 12.0;
