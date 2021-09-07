@@ -78,3 +78,34 @@ sudo make all
 
  
  
+
+######### http://wiki.ros.org/realsense_camera #########
+
+rosinstall_generator cv_bridge pcl_ros > realsense.dependencies
+rosinstall_generator pcl_conversions pcl_msgs tf tf2 tf2_eigen tf2_ros > pcl_ros.dependencies
+rosinstall_generator angles > tf.dependencies
+rosinstall_generator actionlib > tf2_ros.dependencies
+rosinstall_generator tf2_msgs tf2_py > tf2.dependencies
+
+wstool merge -t src <file.dependencies>
+wstool update -t src
+rosdep install -y --from-paths src --ignore-src --rosdistro melodic -r --os=debian:buster
+
+catkin_make -j4 -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES="cv_bridge;tf2_eigen;tf2_py;tf2_msgs;tf2;actionlib;tf2_ros;angles;tf;pcl_msgs ;pcl_conversions;pcl_ros" --force-cmake
+sudo apt-get install libusb-1.0-0-dev pkg-config
+sudo apt-get install libglfw3-dev
+http://wiki.ros.org/realsense_camera/Tutorials/Building_librealsense_from_Sources
+git clone https://github.com/IntelRealSense/librealsense.git
+cd ~/catkin_ws/src
+git checkout tags/v1.12.4 -b librealsense
+cd ~/catkin_ws/
+catkin_make --pkg librealsense
+catkin_make -j4 -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES=realsense_camera --force-cmake
+##ALTERNATIVE
+https://github.com/IntelRealSense/librealsense/blob/legacy/doc/installation.md
+cd librealsense && mkdir build && cd build
+cmake ../
+cmake ../ -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=false
+make && sudo make install
+sudo ldconfig
+ 
