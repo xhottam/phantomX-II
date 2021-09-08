@@ -87,14 +87,25 @@ roslaunch realsense_camera f200_nodelet_default.launch
 rosinstall_generator cv_bridge pcl_ros > realsense.dependencies
 rosinstall_generator pcl_conversions pcl_msgs tf tf2 tf2_eigen tf2_ros > pcl_ros.dependencies
 rosinstall_generator angles > tf.dependencies
-rosinstall_generator actionlib > tf2_ros.dependencies
+rosinstall_generator actionlib actionlib_msgs> tf2_ros.dependencies
 rosinstall_generator tf2_msgs tf2_py > tf2.dependencies
+rosinstall_generator rgbd_launch image_proc depth_image_proc eigen_conversions image_geometry > rgbd_launch.dependencies
+sudo apt-get update
+sudo apt-get install libeigen3-dev libcppunit-dev
+git clone https://github.com/orocos/orocos_kinematics_dynamics.git
+cd orocos_kdl
+mkdir build && cd build
+cmake ..
+make
+sudo make install
 
 wstool merge -t src <file.dependencies>
 wstool update -t src
 rosdep install -y --from-paths src --ignore-src --rosdistro melodic -r --os=debian:buster
 
 catkin_make -j4 -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES="cv_bridge;tf2_eigen;tf2_py;tf2_msgs;tf2;actionlib;tf2_ros;angles;tf;pcl_msgs ;pcl_conversions;pcl_ros" --force-cmake
+catkin_make -j4 -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES=""rgbd_launch;eigen_conversions;image_geometry;image_proc;depth_image_proc" --force-cmake
+
 sudo apt-get install libusb-1.0-0-dev pkg-config
 sudo apt-get install libglfw3-dev
 http://wiki.ros.org/realsense_camera/Tutorials/Building_librealsense_from_Sources
