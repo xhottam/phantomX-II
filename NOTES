@@ -81,6 +81,9 @@ sudo make all
 
 ######### http://wiki.ros.org/realsense_camera #########
 
+roslaunch realsense_camera f200_nodelet_default.launch
+<param name="$(arg camera)/driver/enable_ir"         type="bool"  value="true" />
+
 rosinstall_generator cv_bridge pcl_ros > realsense.dependencies
 rosinstall_generator pcl_conversions pcl_msgs tf tf2 tf2_eigen tf2_ros > pcl_ros.dependencies
 rosinstall_generator angles > tf.dependencies
