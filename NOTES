@@ -108,4 +108,121 @@ cmake ../
 cmake ../ -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=false
 make && sudo make install
 sudo ldconfig
- 
+
+
+[    5.180506] uvcvideo: Unknown video format 52564e49-2d90-4a58-920b-773f1f2c556b
+[    5.180529] uvcvideo: Unknown video format 49524e49-2d90-4a58-920b-773f1f2c556b
+[    5.180550] uvcvideo: Unknown video format 494c4552-1314-f943-a75a-ee6bbf012e23
+https://eleccelerator.com/wiki/index.php?title=Raspbian_Buster_ROS_RealSense#Installing_librealsense
+https://github.com/IntelRealSense/librealsense/blob/master/scripts/realsense-camera-formats.patch
+
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install bison flex bc
+sudo apt-get install raspberrypi-kernel-headers
+git clone https://github.com/raspberrypi/linux.git
+cd linux
+FIRMWARE_HASH=$(zgrep "* firmware as of" /usr/share/doc/raspberrypi-bootloader/changelog.Debian.gz | head -1 | awk '{ print $5 }')
+KERNEL_HASH=$(wget https://raw.githubusercontent.com/raspberrypi/firmware/$FIRMWARE_HASH/extra/git_hash -O -)
+git checkout $KERNEL_HASH
+
+There are 4 files you are editing: "drivers/media/usb/uvc/Makefile", "drivers/media/usb/uvc/uvc_driver.c", "drivers/media/usb/uvc/uvcvideo.h", "include/uapi/linux/videodev2.h" . Edit those files appropriately according to the additions in the patch file, but without adding duplicates.
+
+cp  /usr/src/linux-headers-`uname -r`/Module.symvers .
+sudo modprobe configs
+zcat /proc/config.gz > .config
+make scripts oldconfig modules_prepare
+
+
+sudo modprobe -r uvcvideo
+sudo mv /lib/modules/`uname -r`/kernel/drivers/media/usb/uvc/uvcvideo.ko /lib/modules/`uname -r`/kernel/drivers/media/usb/uvc/uvcvideo.ko.orig
+sudo cp ~/linux/drivers/media/usb/uvc/uvcvideo.ko /lib/modules/`uname -r`/kernel/drivers/media/usb/uvc/uvcvideo.ko
+sudo reboot now
+
+## check module_layout is idem in both orig and modified module.
+sudo modprobe --dump-modversions /lib/modules/5.10.60-v7l+/kernel/drivers/media/usb/uvc/uvcvideo.ko
+
+drivers/media/usb/uvc/Makefile
+CONFIG_MODULE_SIG=n
+
+drivers/media/usb/uvc/uvc_driver.c
+	{
+		.name		= "Raw data 8-bit (RAW8)",
+		.guid		= UVC_GUID_FORMAT_RAW8,
+		.fcc		= V4L2_PIX_FMT_RAW8,
+	},
+	{
+		.name		= "Raw data 16-bit (RW16)",
+		.guid		= UVC_GUID_FORMAT_RW16,
+		.fcc		= V4L2_PIX_FMT_RW16,
+	},
+	{
+		.name		= "Depth 16-bit (INVR)",
+		.guid		= UVC_GUID_FORMAT_INVR,
+		.fcc		= V4L2_PIX_FMT_INVR,
+	},
+	{
+		.name		= "Depth:IR 16:8 24-bit (INRI)",
+		.guid		= UVC_GUID_FORMAT_INRI,
+		.fcc		= V4L2_PIX_FMT_INRI,
+	},
+	{
+		.name		= "FlickerIR 8-bit (RELI)",
+		.guid		= UVC_GUID_FORMAT_RELI,
+		.fcc		= V4L2_PIX_FMT_RELI,
+	},
+	{
+		.name		= "Luminosity data 8-bit (L8)",
+		.guid		= UVC_GUID_FORMAT_L8,
+		.fcc		= V4L2_PIX_FMT_Y8,
+	},
+	{
+		.name		= "Luminosity data 16-bit (L16)",
+		.guid		= UVC_GUID_FORMAT_L16,
+		.fcc		= V4L2_PIX_FMT_Y16,
+	},
+	{
+		.name		= "Depth data 16-bit (D16)",
+		.guid		= UVC_GUID_FORMAT_D16,
+		.fcc		= V4L2_PIX_FMT_Z16,
+	},
+
+drivers/media/usb/uvc/uvcvideo.h
+#define UVC_GUID_FORMAT_RW10 \
+	{ 'R',  'W',  '1',  '0', 0x00, 0x00, 0x10, 0x00, \
+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+#define UVC_GUID_FORMAT_RAW8 \
+    { 'R',  'A',  'W',  '8', 0x66, 0x1a, 0x42, 0xa2, \
+     0x90, 0x65, 0xd0, 0x18, 0x14, 0xa8, 0xef, 0x8a}
+#define UVC_GUID_FORMAT_RW16 \
+    { 'R',  'W',  '1',  '6', 0x00, 0x00, 0x10, 0x00, \
+     0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+#define UVC_GUID_FORMAT_INVR \
+	{ 'I',  'N',  'V',  'R', 0x90, 0x2d, 0x58, 0x4a, \
+	 0x92, 0x0b, 0x77, 0x3f, 0x1f, 0x2c, 0x55, 0x6b}
+#define UVC_GUID_FORMAT_INRI \
+	{ 'I',  'N',  'R',  'I', 0x90, 0x2d, 0x58, 0x4a, \
+	 0x92, 0x0b, 0x77, 0x3f, 0x1f, 0x2c, 0x55, 0x6b}
+#define UVC_GUID_FORMAT_RELI \
+	{ 'R',  'E',  'L',  'I', 0x14, 0x13, 0x43, 0xf9, \
+	 0xa7, 0x5a, 0xee, 0x6b, 0xbf, 0x01, 0x2e, 0x23}
+#define UVC_GUID_FORMAT_L8 \
+	{ '2', 0x00,  0x00,  0x00, 0x00, 0x00, 0x10, 0x00, \
+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+#define UVC_GUID_FORMAT_L16 \
+	{ 'Q', 0x00,  0x00,  0x00, 0x00, 0x00, 0x10, 0x00, \
+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+#define UVC_GUID_FORMAT_D16 \
+	{ 'P', 0x00,  0x00,  0x00, 0x00, 0x00, 0x10, 0x00, \
+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+
+include/uapi/linux/videodev2.h
+   +#define V4L2_PIX_FMT_Z16      v4l2_fourcc('Z', '1', '6', ' ') /* Depth data 16-bit */
+   +#define V4L2_PIX_FMT_Y8       v4l2_fourcc('Y', '8', ' ', ' ') /* Greyscale 8-bit */
+   +#define V4L2_PIX_FMT_Y16      v4l2_fourcc('Y', '1', '6', ' ') /* Greyscale 16-bit */
+   +#define V4L2_PIX_FMT_RAW8     v4l2_fourcc('R', 'A', 'W', '8') /* Raw data 8-bit */
+   +#define V4L2_PIX_FMT_RW16     v4l2_fourcc('R', 'W', '1', '6') /* Raw data 16-bit */
+   +#define V4L2_PIX_FMT_INVR     v4l2_fourcc('I', 'N', 'V', 'R') /* 16 Depth */
+   +#define V4L2_PIX_FMT_INRI     v4l2_fourcc('I', 'N', 'R', 'I') /* 24 Depth/IR 16:8 */
+   +#define V4L2_PIX_FMT_RELI     v4l2_fourcc('R', 'E', 'L', 'I') /* 8 IR alternating on off illumination */
+
+
