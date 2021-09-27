@@ -35,22 +35,31 @@ catkin_make -j4 -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES=""rgbd_la
 sudo apt-get install libusb-1.0-0-dev pkg-config
 sudo apt-get install libglfw3-dev
 http://wiki.ros.org/realsense_camera/Tutorials/Building_librealsense_from_Sources
-cd ~/catkin_ws/
-git clone https://github.com/IntelRealSense/librealsense.git
 cd ~/catkin_ws/src
-git checkout tags/v1.12.4 -b librealsense
+git clone -b legacy https://github.com/IntelRealSense/librealsense.git
 catkin_make --pkg librealsense
 
 ##ALTERNATIVE
 https://github.com/IntelRealSense/librealsense/blob/legacy/doc/installation.md
+git clone -b legacy https://github.com/IntelRealSense/librealsense.git
 cd librealsense && mkdir build && cd build
 cmake ../
 cmake ../ -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=false
 make && sudo make install
 sudo ldconfig
 
+#RPI
 catkin_make -j4 -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES=realsense_camera --force-cmake
 
+#UBUNTU 18.04
+git checkout tags/1.8.1 -b realsense
+rosdep update
+rosdep -y install --from-paths src --ignore-src
+catkin_make --pkg realsense_camera
+https://github.com/IntelRealSense/librealsense/blob/master/config/99-realsense-libusb.rules
+sudo adduser xhottam plugdev
+/etc/udev/rules.d/99-realsense-libusb.rules 
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0a66", MODE:="0666", GROUP:="plugdev" 
 
 
 ##dmesg
