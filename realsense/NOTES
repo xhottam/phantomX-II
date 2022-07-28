@@ -3,6 +3,10 @@ v4l2-ctl --list-devices --verbose
 v4l2-ctl --list-formats-ext --device=/dev/video0
 v4l2-ctl --list-formats --device=/dev/video0
 
+1 /dev/video0 - Depth sensor (Z16)
+2 /dev/video1 - IR sensor (Y8/Y16)
+3 /dev/video2 - RGB sensor (YUYV/BYR2
+
 ######### http://wiki.ros.org/realsense_camera #########
 
 roslaunch realsense_camera f200_nodelet_default.launch
