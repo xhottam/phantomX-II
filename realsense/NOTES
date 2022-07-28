@@ -1,4 +1,8 @@
 
+v4l2-ctl --list-devices --verbose
+v4l2-ctl --list-formats-ext --device=/dev/video0
+v4l2-ctl --list-formats --device=/dev/video0
+
 ######### http://wiki.ros.org/realsense_camera #########
 
 roslaunch realsense_camera f200_nodelet_default.launch
